@@ -1,0 +1,88 @@
+import { ServiceItem } from '@/types/services'
+
+export const SERVICES: ServiceItem[] = [
+  {
+    id: 'erp-development',
+    slug: 'erp-development',
+    title: 'ERP Development',
+    eyebrow: 'Enterprise Resource Planning',
+    description: 'Custom enterprise resource planning architectures designed to unify disparate operations and streamline massive data flows.',
+    longDescription: 'Scalable ERP solutions for enterprise efficiency. Streamline operations, unify data silos, and accelerate decision-making with custom-engineered ERP systems built for high-growth enterprises.',
+    iconName: 'Workflow',
+    features: [
+      'Monolith Decomposition & Microservices Migration',
+      'High-Throughput Distributed Database Refactoring',
+      'Real-Time Multi-Region Inventory Synchronization',
+      'Zero-Downtime Migration & Data Pipeline Pipelines',
+    ],
+    technologies: ['React', 'Node.js', 'PostgreSQL', 'Kafka', 'AWS', 'Docker'],
+    benefits: [
+      { title: 'Unified Data Streams', description: 'Single pane of glass across global supply chain, inventory, and procurement.' },
+      { title: 'Sub-Second Queries', description: 'Optimized schema design reducing complex operational reports from minutes to milliseconds.' },
+      { title: 'High Availability', description: 'Active-active multi-region failover ensuring continuous warehouse operation.' },
+    ],
+  },
+  {
+    id: 'mobile-development',
+    slug: 'mobile-development',
+    title: 'Mobile Apps',
+    eyebrow: 'Native & Cross-Platform',
+    description: 'High-performance native and cross-platform mobile applications prioritizing responsive UI and complex device integration.',
+    longDescription: 'Engineering responsive, ultra-secure mobile applications for iOS and Android that scale to millions of concurrent active users without degradation.',
+    iconName: 'Smartphone',
+    features: [
+      'Cross-Platform Flutter & React Native Engineering',
+      'Native Swift & Kotlin High-Performance Subsystems',
+      'Hardware-Backed Biometrics & Zero-Trust Auth',
+      'Offline-First Local Storage & Sync Engines',
+    ],
+    technologies: ['Flutter', 'React Native', 'Swift', 'Kotlin', 'Go', 'Firebase'],
+    benefits: [
+      { title: 'Fluid 60FPS UI', description: 'Jank-free animations and instant touch response tuned for low-end to flagship devices.' },
+      { title: 'Enterprise Security', description: 'End-to-end payload encryption and secure enclave biometric verification.' },
+      { title: 'Rapid Sprints', description: 'Shared business logic delivering simultaneous iOS and Android releases in half the time.' },
+    ],
+  },
+  {
+    id: 'web-development',
+    slug: 'web-development',
+    title: 'Web Platforms',
+    eyebrow: 'Scalable Web Architecture',
+    description: 'Scalable, secure, and robust web applications leveraging modern frameworks and microservices architectures.',
+    longDescription: 'Next-generation web applications built for speed, accessibility, and high transaction volume using modern React, Next.js, and cloud-native backends.',
+    iconName: 'Layout',
+    features: [
+      'Next.js Full-Stack Server Component Architecture',
+      'Micro-Frontend Federation & Modular Scaling',
+      'Edge Compute & Distributed CDN Optimization',
+      'Automated End-to-End Testing & CI/CD Pipelines',
+    ],
+    technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'GraphQL'],
+    benefits: [
+      { title: 'Sub-Second First Paint', description: 'Optimized SSR and ISR delivering 95+ Google Lighthouse performance scores.' },
+      { title: 'Bulletproof Reliability', description: 'Comprehensive unit, integration, and load tests guarding every production deploy.' },
+      { title: 'Modern User Experience', description: 'Fluid interaction patterns that turn complex workflows into intuitive software.' },
+    ],
+  },
+  {
+    id: 'custom-software',
+    slug: 'custom-software',
+    title: 'Custom Systems',
+    eyebrow: 'Bespoke Software Engineering',
+    description: 'Bespoke software engineering solving unique technical challenges that off-the-shelf solutions cannot address.',
+    longDescription: 'Tailored digital solutions engineered around your proprietary workflows, regulatory constraints, and high-performance business algorithms.',
+    iconName: 'Code2',
+    features: [
+      'Domain-Specific Algorithmic Engine Development',
+      'Legacy System Modernization & Reverse Engineering',
+      'IoT Sensor Telemetry & Streaming Ingestion',
+      'SOC2, HIPAA & GDPR Compliant Infrastructure',
+    ],
+    technologies: ['Go', 'Python', 'Rust', 'PostgreSQL', 'Kubernetes', 'Redis'],
+    benefits: [
+      { title: 'Zero Licensing Lock-In', description: '100% IP ownership handed over to your organization with full documentation.' },
+      { title: 'Tailored for Your Stack', description: 'Engineered specifically for your existing infrastructure and business logic.' },
+      { title: 'Senior Engineers Only', description: 'Senior staff engineers embedded directly into your sprints from day one.' },
+    ],
+  },
+]
