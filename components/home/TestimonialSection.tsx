@@ -8,7 +8,7 @@ const TESTIMONIALS = [
   {
     id: 1,
     quote:
-      "TechNexus doesn't just write code; they engineer solutions that fundamentally improve how our business operates. Their technical transparency and ability to scale complex architectures is unmatched in the outsourcing space.",
+      "RiseUp doesn't just write code; they engineer solutions that fundamentally improve how our business operates. Their technical transparency and ability to scale complex architectures is unmatched in the outsourcing space.",
     name: "Marcus Vance",
     role: "CTO",
     company: "Nexcorp Global",
@@ -18,7 +18,7 @@ const TESTIMONIALS = [
   {
     id: 2,
     quote:
-      "Re-architecting our monolithic legacy ERP into event-driven microservices reduced global warehouse data latency by 42%. TechNexus brought senior staff engineers who owned the delivery from sprint zero.",
+      "Re-architecting our monolithic legacy ERP into event-driven microservices reduced global warehouse data latency by 42%. RiseUp brought senior staff engineers who owned the delivery from sprint zero.",
     name: "Klaus Reinhardt",
     role: "VP of Engineering",
     company: "TransGlobal Logistics",
@@ -28,7 +28,7 @@ const TESTIMONIALS = [
   {
     id: 3,
     quote:
-      "We needed a zero-trust mobile neo-banking platform processing millions of daily transactions under strict FCA audit. TechNexus delivered ahead of schedule with zero security audit findings.",
+      "We needed a zero-trust mobile neo-banking platform processing millions of daily transactions under strict FCA audit. RiseUp delivered ahead of schedule with zero security audit findings.",
     name: "Sophie Laurent",
     role: "Head of Mobile",
     company: "Aura Financial",
@@ -72,11 +72,9 @@ export default function TestimonialSection() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="mb-14 sm:mb-20 text-center max-w-2xl mx-auto"
         >
-          <div className="w-12 h-12 rounded-2xl bg-(--teal)/10 text-(--teal) flex items-center justify-center mx-auto mb-4 border border-(--teal)/20 shadow-xs">
-            <Quote className="w-6 h-6" />
-          </div>
+  
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-(--text-primary) font-display">
-            Trusted by Engineering Leaders
+            Trusted by Leaders and Partners
           </h2>
           <p className="mt-3 text-sm sm:text-base text-(--text-secondary)">
             How CTOs, VPs of Engineering, and founders evaluate our technical

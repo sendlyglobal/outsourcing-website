@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TechNexus Solutions",
+  title: "RiseUp Solutions",
   description: "Engineering high-performance digital systems.",
 };
 

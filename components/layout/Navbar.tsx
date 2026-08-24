@@ -112,7 +112,7 @@ export default function Navbar() {
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-base tracking-tight text-(--text-primary) leading-tight font-display">
-                TechNexus
+                RiseUp
               </span>
               <span className="font-mono text-[9px] uppercase tracking-widest text-(--teal) font-medium">
                 Engineering
@@ -180,7 +180,8 @@ export default function Navbar() {
                         </h3>
                         <p className="mt-3 text-base dark:text-white leading-relaxed">
                           From enterprise systems to high-performance mobile &
-                          web platforms. We build solutions tailored to your goals.
+                          web platforms. We build solutions tailored to your
+                          goals.
                         </p>
                       </div>
 

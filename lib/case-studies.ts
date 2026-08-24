@@ -29,7 +29,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       detail: 'Reduced end-to-end data latency by 42% while unlocking 40% higher operational throughput during peak seasonal demand periods.',
     },
     testimonial: {
-      quote: 'TechNexus transformed our supply chain backbone into a high-performance system that scales seamlessly across all continents.',
+      quote: 'RiseUp transformed our supply chain backbone into a high-performance system that scales seamlessly across all continents.',
       name: 'Klaus Reinhardt',
       title: 'VP of Engineering',
       company: 'TransGlobal Logistics',
@@ -63,7 +63,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       detail: 'Achieved sub-150ms transaction roundtrips while maintaining 99.99% operational uptime across multi-region failover zones.',
     },
     testimonial: {
-      quote: 'The engineering rigor TechNexus brought to our banking core allowed us to pass all security audits on the first pass.',
+      quote: 'The engineering rigor RiseUp brought to our banking core allowed us to pass all security audits on the first pass.',
       name: 'Sophie Laurent',
       title: 'Head of Mobile',
       company: 'Aura Financial',
@@ -97,7 +97,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       detail: 'Cut lab result delivery times from 4 hours to instantaneous push notifications, securely serving over 180,000 patients and 1,200 active clinicians.',
     },
     testimonial: {
-      quote: 'TechNexus delivered a critical healthcare platform that our clinical staff relies on 24/7 without friction.',
+      quote: 'RiseUp delivered a critical healthcare platform that our clinical staff relies on 24/7 without friction.',
       name: 'Dr. David Sterling',
       title: 'Chief Medical Information Officer',
       company: 'NorthEast Health Alliance',
