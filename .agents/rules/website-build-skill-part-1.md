@@ -37,6 +37,8 @@ consistency across pages matters more than any single page looking clever.
 
 **Rule:** one accent color per element. Never mix teal and aqua on the same component. Aqua is for hover/highlight moments only, never a large fill.
 
+**Rule:** theme toggle is required. make the dark mode default which only #00000 color. light mode with complete white color.
+
 **Typography:** Space Grotesk (headings, weight 600–700) · Inter (body, 400) · JetBrains Mono (stats, labels, tags, numbers — this is the site's "data" visual language, use it consistently for anything numeric).
 
 **Grid:** 12-column, max-width 1180–1280px, 8px base spacing unit, section padding 80–120px desktop / 48–64px mobile.

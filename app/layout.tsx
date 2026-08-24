@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-// import Navbar from "@/components/layout/Navbar";
+import Navbar from "@/components/layout/Navbar";
+
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import { QuoteModalProvider } from "@/providers/QuoteModalProvider";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -37,12 +40,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="dark"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+      className={`dark ${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        {/* <Navbar /> */}
-        <main className="pt-16">{children}</main>
+        <ThemeProvider>
+          <QuoteModalProvider>
+            <Navbar />
+            <main className="pt-16">{children}</main>
+          </QuoteModalProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
