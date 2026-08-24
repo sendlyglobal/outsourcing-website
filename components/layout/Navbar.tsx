@@ -137,7 +137,8 @@ export default function Navbar() {
               onMouseEnter={() => setServicesOpen(true)}
               onMouseLeave={() => setServicesOpen(false)}
             >
-              <button
+              <Link
+              href="/services"
                 className={`flex items-center gap-1.5 text-sm font-medium py-1 transition-colors cursor-pointer ${
                   pathname.startsWith("/services")
                     ? "text-(--teal) font-semibold"
@@ -152,7 +153,7 @@ export default function Navbar() {
                     servicesOpen ? "rotate-180 text-(--teal)" : ""
                   }`}
                 />
-              </button>
+              </Link>
 
               {servicesOpen && (
                 <div
