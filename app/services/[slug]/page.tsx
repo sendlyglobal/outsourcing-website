@@ -53,15 +53,6 @@ export default function ServiceDetailPage() {
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button
-                variant="primary"
-                size="md"
-                onClick={() => openQuoteModal(service.id)}
-                className="w-full sm:w-auto min-w-40"
-              >
-                Start This Project
-              </Button>
-
-              <Button
                 variant="secondary"
                 size="md"
                 onClick={() => openQuoteModal(service.id)}

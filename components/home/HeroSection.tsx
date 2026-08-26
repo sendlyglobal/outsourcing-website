@@ -5,13 +5,17 @@ import Image from 'next/image'
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui'
 import { useQuoteModal } from '@/providers/QuoteModalProvider'
+import HeroBackground from './HeroBackground'
 
 export default function HeroSection() {
   const { openQuoteModal } = useQuoteModal()
 
   return (
     <section className="relative w-full overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-14 md:pt-24 md:pb-16 bg-white dark:bg-black px-6 sm:px-12 md:px-16 lg:px-24">
-      <div className="max-w-7xl mx-auto">
+      {/* Interactive Orbital Particle Background */}
+      <HeroBackground />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-14 lg:gap-10 items-center">
           <div className="lg:col-span-7 flex flex-col items-center text-center lg:items-start lg:text-left max-w-2xl mx-auto lg:mx-0">
             <motion.h1
@@ -58,7 +62,7 @@ export default function HeroSection() {
             </motion.div>
           </div>
 
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, scale: 0.94, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -75,7 +79,7 @@ export default function HeroSection() {
               />
               <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl sm:rounded-3xl pointer-events-none" />
             </div>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
     </section>

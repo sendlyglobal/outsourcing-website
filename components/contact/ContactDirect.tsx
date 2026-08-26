@@ -20,7 +20,7 @@ export default function ContactDirect() {
         </h3>
 
         <p className="mt-2 text-xs sm:text-sm text-slate-300 max-w-xs mx-auto leading-relaxed">
-          Skip the form and schedule a 15-minute discovery call directly with an engineering lead.
+          Skip the form and schedule a 15-minute discovery call directly with our team.
         </p>
 
         <button
