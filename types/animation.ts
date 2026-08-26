@@ -1,7 +1,7 @@
 export type ColorTheme = 'teal' | 'electric' | 'emerald' | 'sunset' | 'monochrome';
 export type InteractionMode = 'connect' | 'repel' | 'attract' | 'orbit';
 export type GlobeTheme = 'cyan' | 'gold' | 'emerald' | 'violet' | 'monochrome';
-export type TechDomain = 'web' | 'mobile' | 'erp';
+export type TechDomain = 'web' | 'mobile' | 'erp' | 'custom';
 
 export interface CityNode {
   name: string;
@@ -16,13 +16,13 @@ export type ActiveAnimationPage = 'orbit' | 'timeline' | 'cursor' | 'globe' | 'm
 export interface WebTechPlanet {
   id: string;
   name: string;
-  domain: 'web' | 'mobile' | 'erp';
-  category: 'frontend' | 'backend' | 'database' | 'devops' | 'tooling' | 'mobile-ui' | 'native' | 'core-erp' | 'integration' | 'security';
-  orbitRadius: number; // in pixels relative to base scale
-  speed: number; // angular speed factor (radians/sec)
-  initialAngle: number; // initial angle in radians
-  size: number; // planet diameter
-  color: string; // hex / tailwind color
+  domain: 'web' | 'mobile' | 'erp' | 'custom';
+  category: 'frontend' | 'backend' | 'database' | 'devops' | 'tooling' | 'mobile-ui' | 'native' | 'core-erp' | 'integration' | 'security' | 'systems' | 'low-level' | 'distributed' | 'ai-data';
+  orbitRadius: number;
+  speed: number;
+  initialAngle: number;
+  size: number;
+  color: string;
   glowColor: string;
   iconName: string;
   role: string;
@@ -36,7 +36,7 @@ export interface WebTechPlanet {
 export interface TimelineStep {
   id: string;
   stepNumber: string;
-  domain: 'web' | 'mobile' | 'erp';
+  domain: 'web' | 'mobile' | 'erp' | 'custom';
   title: string;
   subtitle: string;
   duration: string;
@@ -52,5 +52,3 @@ export interface ThemeProps {
   isDark?: boolean;
   setIsDark?: (value: boolean | ((prev: boolean) => boolean)) => void;
 }
-
-

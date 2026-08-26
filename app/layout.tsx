@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
-
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { QuoteModalProvider } from "@/providers/QuoteModalProvider";
 
@@ -43,7 +42,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`dark ${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider>
           <QuoteModalProvider>
             <Navbar />

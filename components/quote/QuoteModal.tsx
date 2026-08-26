@@ -1,20 +1,30 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { 
   X, 
-  Calendar, 
-  Clock, 
-  CheckCircle2, 
-  Video, 
   ChevronLeft,
-  ChevronDown
+  ChevronDown,
+  CheckCircle2
 } from 'lucide-react'
 import { Button, Input } from '@/components/ui'
+
+const Cal = dynamic(
+  () => import('@calcom/embed-react').then((mod) => mod.default),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[420px] flex items-center justify-center text-xs font-mono text-(--text-muted)">
+        Loading scheduler...
+      </div>
+    ),
+  }
+)
 
 export type ProjectType = 'erp' | 'mobile' | 'web' | 'custom'
 
@@ -28,7 +38,7 @@ interface ProjectOption {
   id: ProjectType
   title: string
   desc: string
-  calSlug: string
+  eventSlug: string
 }
 
 const PROJECT_OPTIONS: ProjectOption[] = [
@@ -36,25 +46,25 @@ const PROJECT_OPTIONS: ProjectOption[] = [
     id: 'erp',
     title: 'ERP Development',
     desc: 'Supply chain, SAP/Odoo/custom integrations',
-    calSlug: 'erp-discovery-call',
+    eventSlug: 'globnetics',
   },
   {
     id: 'mobile',
     title: 'Mobile App',
     desc: 'Native iOS/Android or cross-platform apps',
-    calSlug: 'mobile-discovery-call',
+    eventSlug: 'globnetics',
   },
   {
     id: 'web',
     title: 'Web Platform',
     desc: 'High-throughput portals & cloud architecture',
-    calSlug: 'web-discovery-call',
+    eventSlug: 'globnetics',
   },
   {
     id: 'custom',
     title: 'Custom Systems',
     desc: 'Bespoke architectures & complex workflows',
-    calSlug: 'custom-discovery-call',
+    eventSlug: 'globnetics',
   },
 ]
 
@@ -74,8 +84,6 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
 
   const [step, setStep] = useState<'qualify' | 'schedule' | 'confirmed'>('qualify')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null)
-  const [selectedDate, setSelectedDate] = useState<string>('2026-08-25')
 
   const validProjectType = (['erp', 'mobile', 'web', 'custom'].includes(initialProjectType)
     ? initialProjectType
@@ -103,6 +111,7 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
   const watchedName = watch('name')
   const watchedEmail = watch('email')
   const watchedCompany = watch('company')
+  const watchedNotes = watch('notes')
 
   useEffect(() => {
     if (initialProjectType && ['erp', 'mobile', 'web', 'custom'].includes(initialProjectType)) {
@@ -130,21 +139,12 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
 
   if (!isOpen) return null
 
-  const onQualifySubmit = (data: QualifyFormData) => {
+  const onQualifySubmit = () => {
     setIsSubmitting(true)
     setTimeout(() => {
       setIsSubmitting(false)
       setStep('schedule')
     }, 300)
-  }
-
-  const handleBookingConfirm = () => {
-    if (!selectedSlot) return
-    setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setStep('confirmed')
-    }, 400)
   }
 
   const handleNavigateToContact = () => {
@@ -156,7 +156,6 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
     onClose()
     setTimeout(() => {
       setStep('qualify')
-      setSelectedSlot(null)
       reset()
     }, 300)
   }
@@ -175,29 +174,29 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
     >
       <div
         ref={modalRef}
-        className={`relative w-full overflow-hidden rounded-2xl border transition-all duration-300 shadow-2xl shadow-black/40 dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] bg-white dark:bg-black border-[var(--border-color)] ${
-          step === 'schedule' ? 'max-w-[760px]' : 'max-w-[640px]'
+        className={`relative w-full overflow-hidden rounded-2xl border transition-all duration-300 shadow-2xl shadow-black/40 dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] bg-white dark:bg-black border-(--border-color) ${
+          step === 'schedule' ? 'max-w-4xl' : 'max-w-2xl'
         }`}
       >
-        <div className="flex items-center justify-between border-b border-[var(--border-color)] px-6 py-4 bg-white dark:bg-black">
+        <div className="flex items-center justify-between border-b border-(--border-color) px-6 py-4 bg-white dark:bg-black">
           <div className="flex items-center gap-2">
             {step === 'schedule' && (
               <button
                 type="button"
                 onClick={() => setStep('qualify')}
-                className="mr-1 p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-color)]/30 transition-colors"
+                className="mr-1 p-1 rounded-md text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--border-color)/30 transition-colors cursor-pointer"
                 aria-label="Back to details"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
             )}
             <div>
-              <span className="font-mono text-xs tracking-wider uppercase text-[var(--teal)] font-medium">
-                {step === 'qualify' ? 'Step 1 of 2' : step === 'schedule' ? 'Step 2 of 2' : 'Call Confirmed'}
+              <span className="font-mono text-xs tracking-wider uppercase text-(--teal) font-medium">
+                {step === 'qualify' ? 'Step 1 of 2: Requirements' : step === 'schedule' ? 'Step 2 of 2: Select a Time Slot' : 'Booking Confirmed'}
               </span>
-              <h2 id="quote-modal-title" className="text-lg font-bold text-[var(--text-primary)]">
-                {step === 'qualify' && 'Request a Scoped Quote'}
-                {step === 'schedule' && 'Pick a Discovery Call Slot'}
+              <h2 id="quote-modal-title" className="text-lg font-bold text-(--text-primary) font-display">
+                {step === 'qualify' && 'Request a Scoped Architecture Estimate'}
+                {step === 'schedule' && `${activeOption.title} Discovery Session`}
                 {step === 'confirmed' && 'Discovery Call Scheduled'}
               </h2>
             </div>
@@ -205,7 +204,7 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
           <button
             type="button"
             onClick={handleResetAndClose}
-            className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--border-color)]/30 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-(--text-muted) hover:text-(--text-primary) hover:bg-(--border-color)/30 transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -215,32 +214,32 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
         <div className="p-6 bg-white dark:bg-black">
           {step === 'qualify' && (
             <form onSubmit={handleSubmit(onQualifySubmit)} className="space-y-4">
-              <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
-                Tell us what you're building. We'll review your requirements and prepare a realistic architecture & cost estimate for your discovery call.
+              <p className="text-xs sm:text-sm text-(--text-secondary) leading-relaxed">
+                Tell us what you&apos;re building. We&apos;ll review your requirements and prepare a realistic architecture &amp; cost estimate for your discovery call.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div className="w-full flex flex-col gap-1.5">
                   <label
                     htmlFor="quote-project-type"
-                    className="text-xs font-mono font-medium uppercase tracking-wider text-[var(--text-secondary)] flex items-center"
+                    className="text-xs font-mono font-medium uppercase tracking-wider text-(--text-secondary) flex items-center"
                   >
                     <span>Project Domain</span>
-                    <span className="text-[var(--teal)] ml-1">*</span>
+                    <span className="text-(--teal) ml-1">*</span>
                   </label>
                   <div className="relative">
                     <select
                       id="quote-project-type"
                       {...register('projectType')}
-                      className="w-full h-11 px-3.5 pr-10 rounded-xl border border-[var(--border-color)] text-sm bg-white dark:bg-black text-[var(--text-primary)] transition-all duration-200 outline-none focus:border-[var(--teal)] focus:ring-1 focus:ring-[var(--teal)] cursor-pointer appearance-none"
+                      className="w-full h-11 px-3.5 pr-10 rounded-xl border border-(--border-color) text-sm bg-white dark:bg-black text-(--text-primary) transition-all duration-200 outline-none focus:border-(--teal) focus:ring-1 focus:ring-(--teal) cursor-pointer appearance-none"
                     >
                       {PROJECT_OPTIONS.map((opt) => (
-                        <option key={opt.id} value={opt.id} className="bg-white dark:bg-black text-[var(--text-primary)]">
+                        <option key={opt.id} value={opt.id} className="bg-white dark:bg-black text-(--text-primary)">
                           {opt.title}
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="w-4 h-4 text-[var(--text-muted)] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <ChevronDown className="w-4 h-4 text-(--text-muted) absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
                   {errors.projectType?.message && (
                     <span className="text-xs text-red-400 font-medium pl-0.5">{errors.projectType.message}</span>
@@ -298,7 +297,7 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
                 <button
                   type="button"
                   onClick={handleNavigateToContact}
-                  className="text-xs text-[var(--teal)] hover:underline font-medium inline-flex items-center gap-1 cursor-pointer"
+                  className="text-xs text-(--teal) hover:underline font-medium inline-flex items-center gap-1 cursor-pointer"
                 >
                   Prefer email? Send us a message instead
                 </button>
@@ -307,126 +306,50 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
           )}
 
           {step === 'schedule' && (
-            <div className="space-y-4">
-              <div className="p-3.5 rounded-xl border border-[var(--teal)]/30 bg-[var(--teal)]/5 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[var(--teal)]/10 text-[var(--teal)]">
-                    <Video className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-mono text-[var(--teal)] uppercase font-semibold">
-                      {activeOption.title} Discovery Call
-                    </div>
-                    <div className="text-xs text-[var(--text-secondary)]">
-                      30 mins via Zoom · Technical Lead & Solutions Architect
-                    </div>
-                  </div>
-                </div>
-                <span className="text-[11px] font-mono px-2 py-1 rounded bg-[var(--border-color)] text-[var(--text-secondary)]">
-                  {watchedCompany || 'Direct'}
-                </span>
+            <div className="w-full space-y-3">
+              <div className="w-full h-[420px] sm:h-[450px] rounded-xl overflow-hidden border border-(--border-color) bg-white dark:bg-black">
+                <Cal
+                  calLink={activeOption.eventSlug || 'globnetics'}
+                  style={{ width: '100%', height: '100%', overflow: 'auto' }}
+                  config={{
+                    name: watchedName,
+                    email: watchedEmail,
+                    notes: `${watchedCompany ? `Company: ${watchedCompany}. ` : ''}${watchedNotes || ''}`,
+                    theme: 'auto',
+                  }}
+                />
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-2.5">
-                  <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)] font-medium flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-[var(--teal)]" /> Select Date & Time (UTC)
-                  </span>
-                  <div className="flex items-center gap-2">
-                    {['2026-08-25', '2026-08-26', '2026-08-27'].map((d) => (
-                      <button
-                        key={d}
-                        type="button"
-                        onClick={() => {
-                          setSelectedDate(d)
-                          setSelectedSlot(null)
-                        }}
-                        className={`px-3 py-1.5 text-xs rounded-md border font-mono transition-colors cursor-pointer ${
-                          selectedDate === d
-                            ? 'bg-[var(--teal)] text-white border-[var(--teal)]'
-                            : 'border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--teal)] bg-white dark:bg-black'
-                        }`}
-                      >
-                        {d.slice(5)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2.5">
-                  {['09:00 AM', '11:30 AM', '02:00 PM', '03:30 PM', '05:00 PM', '06:30 PM'].map((slot) => {
-                    const isSelected = selectedSlot === slot
-                    return (
-                      <button
-                        key={slot}
-                        type="button"
-                        onClick={() => setSelectedSlot(slot)}
-                        className={`flex items-center justify-center gap-1.5 py-3 px-3.5 rounded-lg border text-xs font-mono transition-all cursor-pointer ${
-                          isSelected
-                            ? 'border-[var(--teal)] bg-[var(--teal)] text-white font-medium shadow'
-                            : 'border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--teal)]/60 bg-white dark:bg-black'
-                        }`}
-                      >
-                        <Clock className="w-3.5 h-3.5 opacity-75" />
-                        <span>{slot}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-
-              <div className="text-xs text-[var(--text-muted)] bg-white dark:bg-black p-3 rounded-lg border border-[var(--border-color)] flex items-center gap-2">
-                <Video className="w-4 h-4 text-[var(--teal)] shrink-0" />
-                <span>A Zoom link and calendar invite will be automatically dispatched to <strong className="text-[var(--text-primary)]">{watchedEmail}</strong>.</span>
-              </div>
-
-              <div className="pt-1">
-                <Button
-                  type="button"
-                  fullWidth
-                  size="lg"
-                  disabled={!selectedSlot || isSubmitting}
-                  onClick={handleBookingConfirm}
-                >
-                  {isSubmitting ? 'Booking Discovery Session...' : `Confirm Call for ${selectedSlot || 'Select a time'}`}
-                </Button>
-              </div>
-
-              <div className="text-center">
+              <div className="flex items-center justify-between pt-0.5 text-xs text-(--text-muted)">
+                <span>Direct 30-minute discovery session with Principal Solutions Architect.</span>
                 <button
                   type="button"
                   onClick={handleNavigateToContact}
-                  className="text-xs text-[var(--teal)] hover:underline font-medium inline-flex items-center gap-1 cursor-pointer"
+                  className="text-(--teal) hover:underline font-medium cursor-pointer"
                 >
-                  Need a custom time or async RFP? Contact us instead
+                  Need a custom time? Contact us
                 </button>
               </div>
             </div>
           )}
 
           {step === 'confirmed' && (
-            <div className="text-center py-4 space-y-4">
-              <div className="w-12 h-12 rounded-full bg-[var(--teal)]/10 text-[var(--teal)] flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-6 h-6" />
+            <div className="text-center py-6 space-y-4">
+              <div className="w-14 h-14 rounded-full bg-(--teal)/10 text-(--teal) flex items-center justify-center mx-auto border border-(--teal)/20">
+                <CheckCircle2 className="w-7 h-7" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[var(--text-primary)] font-display">
-                  We're Ready for You, {watchedName ? watchedName.split(' ')[0] : 'there'}!
+                <h3 className="text-xl font-bold text-(--text-primary) font-display">
+                  Discovery Session Confirmed!
                 </h3>
-                <p className="text-xs text-[var(--text-secondary)] mt-1.5 max-w-sm mx-auto leading-relaxed">
-                  Your 30-minute discovery session for <span className="font-semibold text-[var(--text-primary)]">{activeOption.title}</span> has been confirmed for <span className="font-mono text-[var(--teal)]">{selectedDate} at {selectedSlot}</span>.
+                <p className="text-xs sm:text-sm text-(--text-secondary) mt-2 max-w-md mx-auto leading-relaxed">
+                  Thank you, <span className="font-semibold text-(--text-primary)">{watchedName || 'there'}</span>. A calendar invitation and video conference link have been sent to <span className="font-mono font-medium text-(--teal)">{watchedEmail}</span>.
                 </p>
               </div>
 
-              <div className="p-3 bg-white dark:bg-black rounded-xl border border-[var(--border-color)] text-xs text-[var(--text-secondary)] space-y-1">
-                <div>Calendar invitation sent to: <strong className="text-[var(--text-primary)] font-mono">{watchedEmail}</strong></div>
-                <div>Format: Zoom Video Conference with Principal Engineer</div>
-              </div>
-
-              <div className="pt-2">
+              <div className="pt-4">
                 <Button
                   type="button"
-                  fullWidth
                   size="md"
                   onClick={handleResetAndClose}
                 >

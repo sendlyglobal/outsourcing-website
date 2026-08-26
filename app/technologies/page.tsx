@@ -1,11 +1,21 @@
-import React from "react";
+import type { Metadata } from 'next'
+import React from 'react'
+import TechnologiesHeroBanner from '@/components/technologies/TechnologiesHeroBanner'
+import ServiceStacks from '@/components/technologies/ServiceStacks'
+import TechnicalFAQ from '@/components/technologies/TechnicalFAQ'
 
-function page() {
-  return (
-    <div className="max-w-full min-h-screen dark:bg-black flex items-center justify-center">
-      <div className="bg-black p-6 w-64 h-64 rounded-2xl border border-amber-50  flex items-center justify-center">card</div>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: 'Enterprise Technology Stacks | RiseUp',
+  description:
+    'Explore our production-grade technology clusters engineered for enterprise scalability across Web, Mobile, ERP, and Custom systems.',
 }
 
-export default page;
+export default function TechnologiesPage() {
+  return (
+    <div className="w-full flex justify-between flex-col min-h-screen">
+      <TechnologiesHeroBanner />
+      <ServiceStacks />
+      <TechnicalFAQ />
+    </div>
+  )
+}

@@ -16,7 +16,6 @@ import {
   Cpu,
   ArrowRight,
   ChevronRight,
-  Sparkles,
 } from "lucide-react";
 import { useQuoteModal } from "@/providers/QuoteModalProvider";
 import { Button } from "../ui";
@@ -48,8 +47,34 @@ const SERVICES_LIST = [
   },
 ];
 
+const TECH_SECTIONS = [
+  {
+    id: "web",
+    title: "Web Platforms",
+    techs: ["Next.js", "React", "TypeScript"],
+    href: "/technologies/web",
+  },
+  {
+    id: "mobile",
+    title: "Mobile Apps",
+    techs: ["React Native", "Flutter", "Swift & Kotlin"],
+    href: "/technologies/mobile",
+  },
+  {
+    id: "erp",
+    title: "ERP Development",
+    techs: ["ODOO", "PostgreSQL", "Docker"],
+    href: "/technologies/erp",
+  },
+  {
+    id: "custom",
+    title: "Custom Systems",
+    techs: ["Go", "Rust", "Python"],
+    href: "/technologies/custom",
+  },
+];
+
 const NAV_LINKS = [
-  { title: "Technologies", href: "/technologies" },
   { title: "Case Studies", href: "/case-studies" },
   { title: "About Us", href: "/about" },
   { title: "Contact", href: "/contact" },
@@ -62,8 +87,10 @@ export default function Navbar() {
 
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [techOpen, setTechOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileTechOpen, setMobileTechOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 12);
@@ -74,6 +101,7 @@ export default function Navbar() {
   useEffect(() => {
     setMobileMenuOpen(false);
     setServicesOpen(false);
+    setTechOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -138,7 +166,7 @@ export default function Navbar() {
               onMouseLeave={() => setServicesOpen(false)}
             >
               <Link
-              href="/services"
+                href="/services"
                 className={`flex items-center gap-1.5 text-sm font-medium py-1 transition-colors cursor-pointer ${
                   pathname.startsWith("/services")
                     ? "text-(--teal) font-semibold"
@@ -157,29 +185,21 @@ export default function Navbar() {
 
               {servicesOpen && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-[720px] rounded-2xl border shadow-2xl overflow-hidden animate-fadeIn z-50"
-                  style={{
-                    backgroundColor:
-                      "color-mix(in srgb, var(--bg-modal) 92%, transparent)",
-                    borderColor: "var(--border-color)",
-                    backdropFilter: "blur(24px)",
-                    WebkitBackdropFilter: "blur(24px)",
-                  }}
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-[720px] rounded-2xl border shadow-2xl overflow-hidden animate-fadeIn z-50 bg-white dark:bg-black border-(--border-color)"
                 >
                   <div className="flex">
                     <div
-                      className="w-[250px] shrink-0 p-7 flex flex-col justify-between"
+                      className="w-[250px] shrink-0 p-7 flex flex-col justify-between border-r border-(--border-color)"
                       style={{
                         backgroundColor:
-                          "color-mix(in srgb, var(--teal) 12%, var(--bg-primary))",
-                        borderRight: "1px solid var(--border-color)",
+                          "color-mix(in srgb, var(--teal) 10%, var(--bg-primary))",
                       }}
                     >
                       <div>
                         <h3 className="text-[15px] font-bold text-(--text-primary) leading-snug">
                           Explore Our Services
                         </h3>
-                        <p className="mt-3 text-base dark:text-white leading-relaxed">
+                        <p className="mt-3 text-xs text-(--text-secondary) leading-relaxed">
                           From enterprise systems to high-performance mobile &
                           web platforms. We build solutions tailored to your
                           goals.
@@ -229,13 +249,90 @@ export default function Navbar() {
                               >
                                 {service.title}
                               </div>
-                              <div className="text-[11px] dark:text-white mt-1.5 leading-snug line-clamp-2">
+                              <div className="text-[11px] text-(--text-secondary) mt-1.5 leading-snug line-clamp-2">
                                 {service.desc}
                               </div>
                             </div>
                           </Link>
                         );
                       })}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div
+              className="relative py-2"
+              onMouseEnter={() => setTechOpen(true)}
+              onMouseLeave={() => setTechOpen(false)}
+            >
+              <Link
+                href="/technologies"
+                className={`flex items-center gap-1.5 text-sm font-medium py-1 transition-colors cursor-pointer ${
+                  pathname.startsWith("/technologies")
+                    ? "text-(--teal) font-semibold"
+                    : "text-(--text-secondary) hover:text-(--text-primary)"
+                }`}
+                aria-expanded={techOpen}
+              >
+                <span>Technologies</span>
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-200 ${
+                    techOpen ? "rotate-180 text-(--teal)" : ""
+                  }`}
+                />
+              </Link>
+
+              {techOpen && (
+                <div
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-[780px] rounded-2xl border shadow-2xl overflow-hidden animate-fadeIn z-50 bg-white dark:bg-black border-(--border-color)"
+                >
+                  <div className="p-6">
+                    <div className="grid grid-cols-4 divide-x divide-(--border-color)">
+                      {TECH_SECTIONS.map((sec) => (
+                        <div key={sec.id} className="px-5 first:pl-2 last:pr-2 flex flex-col justify-between min-h-[160px]">
+                          <div>
+                            <h4 className="text-sm font-bold text-(--text-primary) font-display mb-3.5">
+                              {sec.title}
+                            </h4>
+                            <div className="space-y-2">
+                              {sec.techs.map((tech) => (
+                                <span
+                                  key={tech}
+                                  className="block text-xs text-(--text-secondary) hover:text-(--teal) transition-colors font-medium cursor-default"
+                                >
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="mt-4 pt-3 border-t border-(--border-color)/50">
+                            <Link
+                              href={sec.href}
+                              className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) hover:text-(--aqua) transition-all group font-mono"
+                            >
+                              <span>See details</span>
+                              <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-(--border-color) flex items-center justify-between">
+                      <p className="text-xs text-(--text-secondary)">
+                        Production-grade engineering across enterprise stacks.
+                      </p>
+                      <Link
+                        href="/technologies"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) hover:text-(--aqua) transition-colors font-mono"
+                      >
+                        <span>All Technologies</span>
+                        <ArrowRight size={13} />
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -311,16 +408,9 @@ export default function Navbar() {
 
       {mobileMenuOpen && (
         <div
-          className="md:hidden fixed inset-x-0 top-18 bottom-0 z-60 flex flex-col overflow-y-auto border-t animate-fadeIn"
-          style={{
-            backgroundColor:
-              "color-mix(in srgb, var(--bg-modal) 94%, transparent)",
-            borderColor: "var(--border-color)",
-            backdropFilter: "blur(28px)",
-            WebkitBackdropFilter: "blur(28px)",
-          }}
+          className="md:hidden fixed inset-x-0 top-18 bottom-0 z-60 flex flex-col overflow-y-auto border-t animate-fadeIn bg-white dark:bg-black border-(--border-color)"
         >
-          <div className="flex-1 p-5 space-y-5">
+          <div className="flex-1 p-5 space-y-4">
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
@@ -340,20 +430,13 @@ export default function Navbar() {
             </Link>
 
             <div
-              className="rounded-2xl border overflow-hidden"
-              style={{
-                backgroundColor:
-                  "color-mix(in srgb, var(--bg-primary) 55%, transparent)",
-                borderColor: "var(--border-color)",
-              }}
+              className="rounded-2xl border overflow-hidden border-(--border-color)"
             >
               <button
                 onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
                 className="w-full flex items-center justify-between px-4 py-3.5 text-xs font-mono uppercase tracking-wider text-(--teal) font-semibold"
               >
-                <div className="flex items-center gap-2">
-                  <span>Services</span>
-                </div>
+                <span>Services</span>
                 <ChevronDown
                   size={15}
                   className={`transition-transform duration-200 ${
@@ -365,10 +448,7 @@ export default function Navbar() {
               </button>
 
               {mobileServicesOpen && (
-                <div
-                  className="px-3 pb-3 grid grid-cols-1 gap-1.5 border-t"
-                  style={{ borderColor: "var(--border-color)" }}
-                >
+                <div className="px-3 pb-3 grid grid-cols-1 gap-1.5 border-t border-(--border-color)">
                   {SERVICES_LIST.map((service) => {
                     const Icon = service.icon;
                     const isActive = pathname === service.slug;
@@ -407,6 +487,66 @@ export default function Navbar() {
               )}
             </div>
 
+            <div
+              className="rounded-2xl border overflow-hidden border-(--border-color)"
+            >
+              <button
+                onClick={() => setMobileTechOpen(!mobileTechOpen)}
+                className="w-full flex items-center justify-between px-4 py-3.5 text-xs font-mono uppercase tracking-wider text-(--teal) font-semibold"
+              >
+                <span>Technologies</span>
+                <ChevronDown
+                  size={15}
+                  className={`transition-transform duration-200 ${
+                    mobileTechOpen
+                      ? "rotate-180 text-(--teal)"
+                      : "text-(--text-secondary)"
+                  }`}
+                />
+              </button>
+
+              {mobileTechOpen && (
+                <div className="px-4 pb-4 space-y-4 border-t border-(--border-color) pt-3">
+                  {TECH_SECTIONS.map((sec) => (
+                    <div key={sec.id} className="space-y-1.5">
+                      <div className="text-xs font-bold text-(--text-primary) font-display">
+                        {sec.title}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {sec.techs.map((tech) => (
+                          <span
+                            key={tech}
+                            className="font-mono text-[11px] px-2.5 py-1 rounded bg-(--border-color)/30 text-(--text-secondary)"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      <Link
+                        href={sec.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-(--teal) mt-1 font-mono"
+                      >
+                        <span>See details</span>
+                        <ArrowRight size={11} />
+                      </Link>
+                    </div>
+                  ))}
+
+                  <div className="pt-2 border-t border-(--border-color)">
+                    <Link
+                      href="/technologies"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) font-mono"
+                    >
+                      <span>All Technologies</span>
+                      <ArrowRight size={13} />
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="space-y-1">
               {NAV_LINKS.map((link) => {
                 const isActive = pathname.startsWith(link.href);
@@ -435,8 +575,7 @@ export default function Navbar() {
           </div>
 
           <div
-            className="p-5 border-t space-y-3"
-            style={{ borderColor: "var(--border-color)" }}
+            className="p-5 border-t space-y-3 border-(--border-color)"
           >
             <Button
               variant="quote"
