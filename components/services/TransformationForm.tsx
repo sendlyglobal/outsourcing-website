@@ -85,8 +85,8 @@ export default function TransformationForm() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <Input
-                  label="Company Name"
-                  placeholder="Acme Corp"
+                  label="Company/Personal Name"
+                  placeholder=""
                   {...register('companyName')}
                   error={errors.companyName?.message}
                 />
@@ -94,7 +94,7 @@ export default function TransformationForm() {
                 <Input
                   label="Work Email"
                   type="email"
-                  placeholder="lead@acme.com"
+                  placeholder=""
                   {...register('email')}
                   error={errors.email?.message}
                 />

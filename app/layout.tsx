@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { QuoteModalProvider } from "@/providers/QuoteModalProvider";
 
@@ -42,11 +43,12 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`dark ${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className="flex flex-col min-h-screen">
         <ThemeProvider>
           <QuoteModalProvider>
             <Navbar />
-            <main className="pt-16">{children}</main>
+            <main className="pt-16 flex-1">{children}</main>
+            <Footer />
           </QuoteModalProvider>
         </ThemeProvider>
       </body>

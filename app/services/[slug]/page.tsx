@@ -26,13 +26,6 @@ export default function ServiceDetailPage() {
     <div className="w-full flex flex-col">
       <section className="relative w-full overflow-hidden pt-16 pb-14 sm:pt-20 sm:pb-18 dark:bg-black px-6 sm:px-10 md:px-14 lg:px-20">
         <div className="max-w-5xl mx-auto">
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-(--teal) hover:text-(--aqua) transition-colors mb-6 group font-mono"
-          >
-            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-            <span>All Services</span>
-          </Link>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

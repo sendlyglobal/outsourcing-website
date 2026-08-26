@@ -90,16 +90,6 @@ export default function CaseStudiesList() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
-                    {study.metric && (
-                      <div className="absolute bottom-3 right-3 w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-[#071a30] border-2 border-white/20 text-white flex flex-col items-center justify-center text-center shadow-2xl z-10">
-                        <span className="font-mono font-bold text-sm sm:text-base leading-none text-teal-400">
-                          {study.metric}
-                        </span>
-                        <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-tighter text-slate-300 mt-0.5 leading-tight px-1">
-                          {study.metricLabel || 'IMPACT'}
-                        </span>
-                      </div>
-                    )}
                   </div>
 
                   <div className="p-6 sm:p-7">
