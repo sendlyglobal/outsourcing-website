@@ -52,3 +52,31 @@ export interface ThemeProps {
   isDark?: boolean;
   setIsDark?: (value: boolean | ((prev: boolean) => boolean)) => void;
 }
+
+export type FaceOrientation = 'front' | 'right' | 'back' | 'left' | 'top' | 'bottom';
+
+export interface OutsourcingBlock {
+  id: number;
+  face: FaceOrientation;
+  code: string;
+  title: string;
+  subtitle: string;
+  tag: string;
+  bullets: string[];
+  iconName: 'Users' | 'Layers' | 'Cpu' | 'ShieldCheck' | 'Zap' | 'Box' | 'Activity' | 'Terminal' | 'Lock';
+  metric?: string;
+  metricLabel?: string;
+  techStack?: string[];
+  extendedDetails?: {
+    overview: string;
+    capabilities: string[];
+    slaMetrics: { label: string; value: string }[];
+    deploymentModel: string;
+    securityStandard: string;
+  };
+}
+
+export interface CubeAngles {
+  rotX: number;
+  rotY: number;
+}

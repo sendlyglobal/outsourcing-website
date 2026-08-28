@@ -1,0 +1,319 @@
+'use client'
+
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Zap } from "lucide-react";
+import { OutsourcingBlock, FaceOrientation, CubeAngles } from "@/types/animation";
+import { CUBE_BLOCKS, FACE_ORIENTATIONS } from "./cubeBlocks";
+import { CubeFaceCard } from "./CubeFaceCard";
+
+interface CubeStageProps {
+  onInspectBlock?: (block: OutsourcingBlock) => void;
+  selectedFace?: FaceOrientation | null;
+  onSelectFace?: (face: FaceOrientation) => void;
+  expansionFactor?: number;
+  angles?: CubeAngles;
+  setAngles?: React.Dispatch<React.SetStateAction<CubeAngles>>;
+  className?: string;
+}
+
+const DEFAULT_INITIAL_ANGLES: CubeAngles = { rotX: -20, rotY: 35 };
+
+export const CubeStage: React.FC<CubeStageProps> = ({
+  onInspectBlock,
+  selectedFace: controlledSelectedFace,
+  onSelectFace: controlledOnSelectFace,
+  expansionFactor = 1.35,
+  angles: controlledAngles,
+  setAngles: controlledSetAngles,
+  className = "h-[450px] sm:h-[500px] lg:h-[540px]",
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Internal state fallbacks if not controlled
+  const [internalAngles, setInternalAngles] = useState<CubeAngles>(DEFAULT_INITIAL_ANGLES);
+  const [internalSelectedFace, setInternalSelectedFace] = useState<FaceOrientation | null>("front");
+
+  const angles = controlledAngles ?? internalAngles;
+  const setAngles = controlledSetAngles ?? setInternalAngles;
+  const selectedFace = controlledSelectedFace !== undefined ? controlledSelectedFace : internalSelectedFace;
+  const onSelectFace = controlledOnSelectFace ?? setInternalSelectedFace;
+
+  // Dragging & Physics momentum refs
+  const isDraggingRef = useRef<boolean>(false);
+  const pointerStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lastPointerRef = useRef<{ x: number; y: number; time: number }>({
+    x: 0,
+    y: 0,
+    time: 0,
+  });
+  const velocityRef = useRef<{ vx: number; vy: number }>({ vx: 0, vy: 0 });
+  const targetAnglesRef = useRef<CubeAngles | null>(null);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isBuilt, setIsBuilt] = useState<boolean>(false);
+
+  // Responsive cube base dimension
+  const [cubeSize, setCubeSize] = useState<number>(270);
+
+  useEffect(() => {
+    const updateSize = () => {
+      if (typeof window === "undefined") return;
+      const width = window.innerWidth;
+      if (width < 640) {
+        setCubeSize(210);
+      } else if (width < 1024) {
+        setCubeSize(240);
+      } else if (width < 1280) {
+        setCubeSize(260);
+      } else {
+        setCubeSize(275);
+      }
+    };
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  // Trigger initial build-up assembly
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsBuilt(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Physics animation loop (momentum damping + slow auto-rotation)
+  useEffect(() => {
+    let animationFrameId: number;
+
+    const updatePhysics = () => {
+      // If snapping to target angles
+      if (targetAnglesRef.current) {
+        const target = targetAnglesRef.current;
+        setAngles((prev) => {
+          const dx = target.rotX - prev.rotX;
+          const dy = target.rotY - prev.rotY;
+
+          // Spring interpolation
+          const newRotX = prev.rotX + dx * 0.12;
+          const newRotY = prev.rotY + dy * 0.12;
+
+          if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+            targetAnglesRef.current = null;
+            return { rotX: target.rotX, rotY: target.rotY };
+          }
+          return { rotX: newRotX, rotY: newRotY };
+        });
+      } else if (!isDraggingRef.current) {
+        // Inertia damping
+        if (
+          Math.abs(velocityRef.current.vx) > 0.01 ||
+          Math.abs(velocityRef.current.vy) > 0.01
+        ) {
+          setAngles((prev) => ({
+            rotX: prev.rotX - velocityRef.current.vy,
+            rotY: prev.rotY + velocityRef.current.vx,
+          }));
+          velocityRef.current.vx *= 0.94;
+          velocityRef.current.vy *= 0.94;
+        } else if (!isHovered) {
+          // Slow steady continuous auto rotation
+          setAngles((prev) => ({
+            rotX: prev.rotX + 0.08 * Math.sin(Date.now() * 0.0008),
+            rotY: (prev.rotY + 0.3) % 360,
+          }));
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(updatePhysics);
+    };
+
+    animationFrameId = requestAnimationFrame(updatePhysics);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isHovered, setAngles]);
+
+  // Pointer drag handlers with pointer capture
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0 && e.pointerType === "mouse") return;
+
+    isDraggingRef.current = true;
+    targetAnglesRef.current = null;
+    velocityRef.current = { vx: 0, vy: 0 };
+    pointerStartRef.current = { x: e.clientX, y: e.clientY };
+    lastPointerRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      time: performance.now(),
+    };
+
+    const target = e.currentTarget;
+    try {
+      target.setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+
+    const now = performance.now();
+    const dt = Math.max(now - lastPointerRef.current.time, 1);
+    const dx = e.clientX - lastPointerRef.current.x;
+    const dy = e.clientY - lastPointerRef.current.y;
+
+    const sensitivity = 0.55;
+
+    setAngles((prev) => ({
+      rotX: Math.max(-180, Math.min(180, prev.rotX - dy * sensitivity)),
+      rotY: prev.rotY + dx * sensitivity,
+    }));
+
+    // Track instant velocity for inertia
+    velocityRef.current = {
+      vx: (dx / dt) * 4.5,
+      vy: (dy / dt) * 4.5,
+    };
+
+    lastPointerRef.current = { x: e.clientX, y: e.clientY, time: now };
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+  };
+
+  // Snap to specific face
+  const snapToFace = useCallback(
+    (face: FaceOrientation) => {
+      onSelectFace(face);
+      const targetConfig = FACE_ORIENTATIONS[face];
+      if (targetConfig) {
+        targetAnglesRef.current = {
+          rotX: targetConfig.rotX,
+          rotY: targetConfig.rotY,
+        };
+      }
+    },
+    [onSelectFace],
+  );
+
+  const halfSize = cubeSize / 2;
+  const currentZDistance = halfSize * expansionFactor;
+
+  // Face transformation configuration based on cube face geometry
+  const getFaceTransform = (face: FaceOrientation, built: boolean) => {
+    if (!built) {
+      return "translate3d(0px, 0px, 0px) scale(0.1)";
+    }
+
+    switch (face) {
+      case "front":
+        return `translateZ(${currentZDistance}px)`;
+      case "back":
+        return `rotateY(180deg) translateZ(${currentZDistance}px)`;
+      case "right":
+        return `rotateY(90deg) translateZ(${currentZDistance}px)`;
+      case "left":
+        return `rotateY(-90deg) translateZ(${currentZDistance}px)`;
+      case "top":
+        return `rotateX(90deg) translateZ(${currentZDistance}px)`;
+      case "bottom":
+        return `rotateX(-90deg) translateZ(${currentZDistance}px)`;
+    }
+  };
+
+  return (
+    <div
+      id="3d-cube-stage-container"
+      ref={containerRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`w-full relative flex items-center justify-center cursor-grab active:cursor-grabbing select-none touch-none ${className}`}
+      style={{ perspective: "1300px" }}
+    >
+      {/* 3D Transform Assembly Container */}
+      <div
+        id="cube-3d-assembly"
+        className="relative flex items-center justify-center transition-transform ease-out"
+        style={{
+          width: `${cubeSize}px`,
+          height: `${cubeSize}px`,
+          transformStyle: "preserve-3d",
+          transform: `rotateX(${angles.rotX}deg) rotateY(${angles.rotY}deg)`,
+        }}
+      >
+        {/* Core Node Engine (Visible in 1.35x depth expansion) */}
+        <div
+          id="inner-core-engine"
+          className="absolute rounded-2xl border border-dashed border-white/40 bg-black flex flex-col items-center justify-center p-4 transition-all duration-500"
+          style={{
+            width: `${cubeSize * 0.52}px`,
+            height: `${cubeSize * 0.52}px`,
+            transform: "translateZ(0px)",
+            transformStyle: "preserve-3d",
+            boxShadow: "0 0 35px rgba(255,255,255,0.15)",
+          }}
+        >
+          <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center font-black mb-1.5 animate-bounce">
+            <Zap size={16} className="fill-black stroke-black" />
+          </div>
+          <span className="font-mono text-[9px] font-black uppercase tracking-widest text-white text-center">
+            CORE KERNEL
+          </span>
+          <span className="font-mono text-[7px] text-white/50 uppercase tracking-wider text-center mt-0.5">
+            HIGH-CONCURRENCY
+          </span>
+        </div>
+
+        {/* 6 Modular Cube Faces */}
+        {CUBE_BLOCKS.map((block) => {
+          const isSelected = selectedFace === block.face;
+          const transformStyle = getFaceTransform(block.face, isBuilt);
+
+          return (
+            <div
+              key={block.id}
+              id={`face-wrapper-${block.face}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                snapToFace(block.face);
+              }}
+              className="absolute top-0 left-0 transition-all cursor-pointer"
+              style={{
+                width: `${cubeSize}px`,
+                height: `${cubeSize}px`,
+                transform: transformStyle,
+                transformStyle: "preserve-3d",
+                transition: isDraggingRef.current
+                  ? "none"
+                  : "transform 0.55s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.5s ease",
+                opacity: isBuilt ? 1 : 0,
+              }}
+            >
+              <CubeFaceCard
+                block={block}
+                isSelected={isSelected}
+                onInspect={(b) => {
+                  if (onInspectBlock) {
+                    onInspectBlock(b);
+                  }
+                  snapToFace(b.face);
+                }}
+                isExploded={true}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

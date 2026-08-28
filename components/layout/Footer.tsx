@@ -8,6 +8,7 @@ const COMPANY_LINKS = [
   { label: 'Services', href: '/services' },
   { label: 'Technologies', href: '/technologies' },
   { label: 'Case Studies', href: '/case-studies' },
+  { label: 'Careers', href: '/careers' },
   { label: 'Contact', href: '/contact' },
 ]
 
