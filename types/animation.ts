@@ -80,3 +80,24 @@ export interface CubeAngles {
   rotX: number;
   rotY: number;
 }
+
+
+export type MethodologyCategory = 'all' | 'web' | 'mobile' | 'devops';
+
+export interface MethodologyStep {
+  id: string;
+  stepNumber: number;
+  code: string;
+  title: string;
+  category: 'web' | 'mobile' | 'devops' | 'architecture';
+  categoryLabel: string;
+  subtitle: string;
+  summary: string;
+  keyPractices: string[];
+  deliverables: string[];
+  techStack: string[];
+  kpis: { label: string; value: string; trend?: string }[];
+  icon: string;
+  phaseDuration: string;
+  bestPractices: string[];
+}

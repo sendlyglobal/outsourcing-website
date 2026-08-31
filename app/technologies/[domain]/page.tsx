@@ -3,6 +3,7 @@
 import React from 'react'
 import { useParams, notFound } from 'next/navigation'
 import { WebOrbitPage } from '@/components/technologies/WebOrbit'
+import { SteppedMethodologySection } from '@/components/StepCards/SteppedMethodologySection'
 import TechnicalFAQ from '@/components/technologies/TechnicalFAQ'
 import { useTheme } from '@/providers/ThemeProvider'
 import { TechDomain } from '@/types/animation'
@@ -27,6 +28,8 @@ export default function TechnologyDomainPage() {
           initialDomain={domain}
         />
       </section>
+
+      <SteppedMethodologySection domain={domain} />
 
       <TechnicalFAQ domain={domain} />
     </div>

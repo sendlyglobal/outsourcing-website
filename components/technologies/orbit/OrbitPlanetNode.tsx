@@ -25,8 +25,8 @@ export const OrbitPlanetNode: React.FC<OrbitPlanetNodeProps> = ({
 }) => {
   const currentAngle = planet.initialAngle + rotationOffset * (planet.speed * 1.8)
   const scaledRadius = planet.orbitRadius * scaleFactor
-  const x = Math.cos(currentAngle) * scaledRadius
-  const y = Math.sin(currentAngle) * scaledRadius
+  const x = Number((Math.cos(currentAngle) * scaledRadius).toFixed(3))
+  const y = Number((Math.sin(currentAngle) * scaledRadius).toFixed(3))
 
   return (
     <div
