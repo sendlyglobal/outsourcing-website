@@ -35,6 +35,18 @@ export const WebOrbitPage: React.FC<WebOrbitProps> = ({
   const lastTimeRef = useRef<number>(performance.now())
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (hoveredPlanet || selectedPlanet) {
+        setHoveredPlanet(null)
+        setSelectedPlanet(null)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [hoveredPlanet, selectedPlanet])
+
+  useEffect(() => {
     const handleResize = () => {
       const w = window.innerWidth
       const h = window.innerHeight
@@ -145,7 +157,6 @@ export const WebOrbitPage: React.FC<WebOrbitProps> = ({
         speedMultiplier={speedMultiplier}
         setSpeedMultiplier={setSpeedMultiplier}
       />
-
 
       <div className="w-full h-full flex items-center justify-center relative">
         <div className="relative w-0 h-0 flex items-center justify-center">

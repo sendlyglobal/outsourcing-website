@@ -23,7 +23,7 @@ export const PlanetTelemetryDrawer: React.FC<PlanetTelemetryDrawerProps> = ({
           animate={{ opacity: 1, x: 0, scale: 1 }}
           exit={{ opacity: 0, x: 50, scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`fixed top-24 right-6 w-80 sm:w-96 rounded-2xl border p-5 backdrop-blur-2xl shadow-2xl z-50 pointer-events-auto space-y-4 ${
+          className={`fixed top-20 sm:top-24 right-3 sm:right-6 left-3 sm:left-auto w-auto sm:w-96 max-w-[calc(100vw-24px)] rounded-2xl border p-5 backdrop-blur-2xl shadow-2xl z-50 pointer-events-auto space-y-4 ${
             isDark
               ? 'bg-black/95 border-zinc-800 text-white shadow-black/80'
               : 'bg-white/95 border-zinc-200 text-black shadow-zinc-400/30'
@@ -39,7 +39,7 @@ export const PlanetTelemetryDrawer: React.FC<PlanetTelemetryDrawerProps> = ({
                   color: planet.color,
                 }}
               >
-                <PlanetIcon name={planet.iconName} />
+                <PlanetIcon name={planet.name} className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
