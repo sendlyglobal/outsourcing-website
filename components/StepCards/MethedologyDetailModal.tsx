@@ -78,18 +78,18 @@ export const MethodologyDetailModal: React.FC<MethodologyDetailModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-mono text-xs font-bold tracking-widest text-white bg-slate-950 dark:text-black dark:bg-white px-2.5 py-0.5 rounded">
+                {/* <span className="font-mono text-xs font-bold tracking-widest text-white bg-slate-950 dark:text-black dark:bg-white px-2.5 py-0.5 rounded">
                   {step.code}
-                </span>
+                </span> */}
                 <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500 dark:text-white/50 font-bold">
-                  ELEVATION STEP 0{step.stepNumber} // {step.categoryLabel}
+                 {step.categoryLabel}
                 </span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tighter text-slate-950 dark:text-white mt-1.5 leading-tight font-display">
                 {step.title}
               </h2>
               <p className="font-mono text-xs text-slate-500 dark:text-white/60 uppercase tracking-widest font-semibold mt-0.5">
-                // {step.subtitle}
+                 {step.subtitle}
               </p>
             </div>
           </div>
@@ -120,14 +120,14 @@ export const MethodologyDetailModal: React.FC<MethodologyDetailModalProps> = ({
         <div className="relative z-10 my-6 space-y-6">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/15">
             <div className="font-mono text-[10px] text-slate-500 dark:text-white/40 uppercase tracking-[0.2em] mb-1.5">
-              // METHODOLOGY SCOPE & PHASE SUMMARY
+               METHODOLOGY SCOPE & PHASE SUMMARY
             </div>
             <p className="text-sm sm:text-base text-slate-700 dark:text-white/90 leading-relaxed font-sans">
               {step.summary}
             </p>
           </div>
 
-          <div>
+          {/* <div>
             <div className="font-mono text-xs font-bold text-slate-900 dark:text-white uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
               <span className="w-1.5 h-1.5 bg-(--teal) rounded-full animate-pulse" />
               OPERATIONAL BENCHMARKS & KPIS
@@ -147,7 +147,7 @@ export const MethodologyDetailModal: React.FC<MethodologyDetailModalProps> = ({
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
