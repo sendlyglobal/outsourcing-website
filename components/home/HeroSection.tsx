@@ -19,16 +19,6 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-8 items-center">
           {/* Left Text & CTA Column */}
           <div className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left max-w-2xl mx-auto lg:mx-0">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/20 bg-white/5 text-xs font-mono text-white mb-5"
-            >
-              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-              <span>DEDICATED SENIOR ENGINEERING SQUADS</span>
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
@@ -45,7 +35,7 @@ export default function HeroSection() {
               className="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl"
             >
               ERP, Mobile, and Web systems built for scale. We deliver technical excellence designed to drive your business forward with uncompromising reliability and agility.
-            </motion.p>
+            </motion.p> 
 
             <motion.div
               initial={{ opacity: 0, y: 16 }}

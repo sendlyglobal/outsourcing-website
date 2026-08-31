@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@/providers/ThemeProvider";
@@ -92,6 +92,44 @@ export default function Navbar() {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileTechOpen, setMobileTechOpen] = useState(false);
 
+  const servicesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const techTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleServicesEnter = () => {
+    if (servicesTimeoutRef.current) clearTimeout(servicesTimeoutRef.current);
+    if (techTimeoutRef.current) clearTimeout(techTimeoutRef.current);
+    setTechOpen(false);
+    setServicesOpen(true);
+  };
+
+  const handleServicesLeave = () => {
+    if (servicesTimeoutRef.current) clearTimeout(servicesTimeoutRef.current);
+    servicesTimeoutRef.current = setTimeout(() => {
+      setServicesOpen(false);
+    }, 200);
+  };
+
+  const handleTechEnter = () => {
+    if (techTimeoutRef.current) clearTimeout(techTimeoutRef.current);
+    if (servicesTimeoutRef.current) clearTimeout(servicesTimeoutRef.current);
+    setServicesOpen(false);
+    setTechOpen(true);
+  };
+
+  const handleTechLeave = () => {
+    if (techTimeoutRef.current) clearTimeout(techTimeoutRef.current);
+    techTimeoutRef.current = setTimeout(() => {
+      setTechOpen(false);
+    }, 200);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (servicesTimeoutRef.current) clearTimeout(servicesTimeoutRef.current);
+      if (techTimeoutRef.current) clearTimeout(techTimeoutRef.current);
+    };
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -162,8 +200,8 @@ export default function Navbar() {
 
             <div
               className="relative py-2"
-              onMouseEnter={() => setServicesOpen(true)}
-              onMouseLeave={() => setServicesOpen(false)}
+              onMouseEnter={handleServicesEnter}
+              onMouseLeave={handleServicesLeave}
             >
               <Link
                 href="/services"
@@ -185,77 +223,81 @@ export default function Navbar() {
 
               {servicesOpen && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-[720px] rounded-2xl border shadow-2xl overflow-hidden animate-fadeIn z-50 bg-white dark:bg-black border-(--border-color)"
+                  className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 w-[720px] z-50 animate-fadeIn"
+                  onMouseEnter={handleServicesEnter}
+                  onMouseLeave={handleServicesLeave}
                 >
-                  <div className="flex">
-                    <div
-                      className="w-[250px] shrink-0 p-7 flex flex-col justify-between border-r border-(--border-color)"
-                      style={{
-                        backgroundColor:
-                          "color-mix(in srgb, var(--teal) 10%, var(--bg-primary))",
-                      }}
-                    >
-                      <div>
-                        <h3 className="text-[15px] font-bold text-(--text-primary) leading-snug">
-                          Explore Our Services
-                        </h3>
-                        <p className="mt-3 text-xs text-(--text-secondary) leading-relaxed">
-                          From enterprise systems to high-performance mobile &
-                          web platforms. We build solutions tailored to your
-                          goals.
-                        </p>
+                  <div className="relative rounded-2xl border shadow-2xl overflow-hidden bg-white dark:bg-black border-(--border-color) before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
+                    <div className="flex">
+                      <div
+                        className="w-[250px] shrink-0 p-7 flex flex-col justify-between border-r border-(--border-color)"
+                        style={{
+                          backgroundColor:
+                            "color-mix(in srgb, var(--teal) 10%, var(--bg-primary))",
+                        }}
+                      >
+                        <div>
+                          <h3 className="text-[15px] font-bold text-(--text-primary) leading-snug">
+                            Explore Our Services
+                          </h3>
+                          <p className="mt-3 text-xs text-(--text-secondary) leading-relaxed">
+                            From enterprise systems to high-performance mobile &
+                            web platforms. We build solutions tailored to your
+                            goals.
+                          </p>
+                        </div>
+
+                        <Link
+                          href="/services"
+                          className="mt-7 inline-flex items-center justify-center gap-2 h-10 px-5 rounded-full bg-(--teal) text-white text-xs font-semibold hover:brightness-110 transition-all"
+                        >
+                          View all services
+                        </Link>
                       </div>
 
-                      <Link
-                        href="/services"
-                        className="mt-7 inline-flex items-center justify-center gap-2 h-10 px-5 rounded-full bg-(--teal) text-white text-xs font-semibold hover:brightness-110 transition-all"
-                      >
-                        View all services
-                      </Link>
-                    </div>
+                      <div className="flex-1 p-5 grid grid-cols-2 gap-3">
+                        {SERVICES_LIST.map((service) => {
+                          const Icon = service.icon;
+                          const isActive = pathname === service.slug;
 
-                    <div className="flex-1 p-5 grid grid-cols-2 gap-3">
-                      {SERVICES_LIST.map((service) => {
-                        const Icon = service.icon;
-                        const isActive = pathname === service.slug;
-
-                        return (
-                          <Link
-                            key={service.slug}
-                            href={service.slug}
-                            className={`group flex flex-col gap-3.5 p-5 rounded-xl border transition-all duration-200 ${
-                              isActive
-                                ? "border-(--teal)/40 bg-(--teal)/8"
-                                : "border-transparent hover:border-(--border-color) hover:bg-(--border-color)/25 dark:hover:bg-white/5"
-                            }`}
-                          >
-                            <div
-                              className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-colors ${
+                          return (
+                            <Link
+                              key={service.slug}
+                              href={service.slug}
+                              className={`group flex flex-col gap-3.5 p-5 rounded-xl border transition-all duration-200 ${
                                 isActive
-                                  ? "bg-(--teal)/15 border-(--teal)/40 text-(--teal)"
-                                  : "bg-(--bg-primary) border-(--border-color) text-(--teal) group-hover:border-(--teal)"
+                                  ? "border-(--teal)/40 bg-(--teal)/8"
+                                  : "border-transparent hover:border-(--border-color) hover:bg-(--border-color)/25 dark:hover:bg-white/5"
                               }`}
                             >
-                              <Icon size={18} />
-                            </div>
-
-                            <div>
                               <div
-                                className={`text-base font-bold leading-tight transition-colors ${
+                                className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-colors ${
                                   isActive
-                                    ? "text-(--teal)"
-                                    : "text-(--text-primary) group-hover:text-(--teal)"
+                                    ? "bg-(--teal)/15 border-(--teal)/40 text-(--teal)"
+                                    : "bg-(--bg-primary) border-(--border-color) text-(--teal) group-hover:border-(--teal)"
                                 }`}
                               >
-                                {service.title}
+                                <Icon size={18} />
                               </div>
-                              <div className="text-[11px] text-(--text-secondary) mt-1.5 leading-snug line-clamp-2">
-                                {service.desc}
+
+                              <div>
+                                <div
+                                  className={`text-base font-bold leading-tight transition-colors ${
+                                    isActive
+                                      ? "text-(--teal)"
+                                      : "text-(--text-primary) group-hover:text-(--teal)"
+                                  }`}
+                                >
+                                  {service.title}
+                                </div>
+                                <div className="text-[11px] text-(--text-secondary) mt-1.5 leading-snug line-clamp-2">
+                                  {service.desc}
+                                </div>
                               </div>
-                            </div>
-                          </Link>
-                        );
-                      })}
+                            </Link>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -264,8 +306,8 @@ export default function Navbar() {
 
             <div
               className="relative py-2"
-              onMouseEnter={() => setTechOpen(true)}
-              onMouseLeave={() => setTechOpen(false)}
+              onMouseEnter={handleTechEnter}
+              onMouseLeave={handleTechLeave}
             >
               <Link
                 href="/technologies"
@@ -287,52 +329,56 @@ export default function Navbar() {
 
               {techOpen && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-[780px] rounded-2xl border shadow-2xl overflow-hidden animate-fadeIn z-50 bg-white dark:bg-black border-(--border-color)"
+                  className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 w-[780px] z-50 animate-fadeIn"
+                  onMouseEnter={handleTechEnter}
+                  onMouseLeave={handleTechLeave}
                 >
-                  <div className="p-6">
-                    <div className="grid grid-cols-4 divide-x divide-(--border-color)">
-                      {TECH_SECTIONS.map((sec) => (
-                        <div key={sec.id} className="px-5 first:pl-2 last:pr-2 flex flex-col justify-between min-h-[160px]">
-                          <div>
-                            <h4 className="text-sm font-bold text-(--text-primary) font-display mb-3.5">
-                              {sec.title}
-                            </h4>
-                            <div className="space-y-2">
-                              {sec.techs.map((tech) => (
-                                <span
-                                  key={tech}
-                                  className="block text-xs text-(--text-secondary) hover:text-(--teal) transition-colors font-medium cursor-default"
-                                >
-                                  {tech}
-                                </span>
-                              ))}
+                  <div className="relative rounded-2xl border shadow-2xl overflow-hidden bg-white dark:bg-black border-(--border-color) before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
+                    <div className="p-6">
+                      <div className="grid grid-cols-4 divide-x divide-(--border-color)">
+                        {TECH_SECTIONS.map((sec) => (
+                          <div key={sec.id} className="px-5 first:pl-2 last:pr-2 flex flex-col justify-between min-h-[160px]">
+                            <div>
+                              <h4 className="text-sm font-bold text-(--text-primary) font-display mb-3.5">
+                                {sec.title}
+                              </h4>
+                              <div className="space-y-2">
+                                {sec.techs.map((tech) => (
+                                  <span
+                                    key={tech}
+                                    className="block text-xs text-(--text-secondary) hover:text-(--teal) transition-colors font-medium cursor-default"
+                                  >
+                                    {tech}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="mt-4 pt-3 border-t border-(--border-color)/50">
+                              <Link
+                                href={sec.href}
+                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) hover:text-(--aqua) transition-all group font-mono"
+                              >
+                                <span>See details</span>
+                                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                              </Link>
                             </div>
                           </div>
+                        ))}
+                      </div>
 
-                          <div className="mt-4 pt-3 border-t border-(--border-color)/50">
-                            <Link
-                              href={sec.href}
-                              className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) hover:text-(--aqua) transition-all group font-mono"
-                            >
-                              <span>See details</span>
-                              <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mt-6 pt-4 border-t border-(--border-color) flex items-center justify-between">
-                      <p className="text-xs text-(--text-secondary)">
-                        Production-grade engineering across enterprise stacks.
-                      </p>
-                      <Link
-                        href="/technologies"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) hover:text-(--aqua) transition-colors font-mono"
-                      >
-                        <span>All Technologies</span>
-                        <ArrowRight size={13} />
-                      </Link>
+                      <div className="mt-6 pt-4 border-t border-(--border-color) flex items-center justify-between">
+                        <p className="text-xs text-(--text-secondary)">
+                          Production-grade engineering across enterprise stacks.
+                        </p>
+                        <Link
+                          href="/technologies"
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) hover:text-(--aqua) transition-colors font-mono"
+                        >
+                          <span>All Technologies</span>
+                          <ArrowRight size={13} />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
