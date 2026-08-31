@@ -23,8 +23,8 @@ export const OrbitCoreStar: React.FC<OrbitCoreStarProps> = ({
       onClick={onTogglePlay}
       title="Click to Play/Pause Orbit"
     >
-      <div className="absolute w-36 h-36 rounded-full bg-gradient-to-r from-(--teal)/20 via-cyan-400/20 to-blue-600/20 blur-xl animate-pulse" />
-      <div className="absolute w-28 h-28 rounded-full bg-gradient-to-tr from-(--teal)/30 to-emerald-400/20 blur-md" />
+      <div className="absolute w-36 h-36 rounded-full bg-linear-to-r from-(--teal)/20 via-cyan-400/20 to-blue-600/20 blur-xl animate-pulse" />
+      <div className="absolute w-28 h-28 rounded-full bg-linear-to-tr from-(--teal)/30 to-emerald-400/20 blur-md" />
 
       <div
         className={`relative w-24 h-24 rounded-full border-2 transition-transform duration-300 group-hover:scale-105 flex flex-col items-center justify-center ${

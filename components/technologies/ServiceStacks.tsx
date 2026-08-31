@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'motion/react'
 import {
   ArrowRight,
@@ -10,6 +11,7 @@ import {
   Globe,
   Cpu,
 } from 'lucide-react'
+import { getTechLogo } from '@/lib/logos'
 
 const STACKS = [
   {
@@ -102,14 +104,28 @@ export default function ServiceStacks() {
                   </p>
 
                   <div className="mt-6 flex flex-wrap gap-2">
-                    {stack.techs.map((tech) => (
-                      <span
-                        key={tech}
-                        className="font-mono text-xs px-3 py-1.5 rounded-lg bg-(--border-color)/25 border border-(--border-color) text-(--text-primary) font-medium"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                    {stack.techs.map((tech) => {
+                      const logo = getTechLogo(tech)
+                      return (
+                        <span
+                          key={tech}
+                          className="inline-flex items-center gap-2 font-mono text-xs px-3 py-1.5 rounded-lg bg-(--border-color)/25 border border-(--border-color) text-(--text-primary) font-medium"
+                        >
+                          {logo && (
+                            <span className="relative w-4 h-4 shrink-0 flex items-center justify-center">
+                              <Image
+                                src={logo}
+                                alt={tech}
+                                width={16}
+                                height={16}
+                                className="object-contain"
+                              />
+                            </span>
+                          )}
+                          <span>{tech}</span>
+                        </span>
+                      )
+                    })}
                   </div>
                 </div>
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import {
   Code2,
   Cpu,
@@ -15,6 +16,7 @@ import {
   Radio,
   GitBranch,
 } from 'lucide-react'
+import { getTechLogo } from '@/lib/logos'
 
 interface PlanetIconProps {
   name: string
@@ -22,6 +24,21 @@ interface PlanetIconProps {
 }
 
 export const PlanetIcon: React.FC<PlanetIconProps> = ({ name, className = 'w-4 h-4' }) => {
+  const logo = getTechLogo(name)
+  if (logo) {
+    return (
+      <span className={`relative inline-flex items-center justify-center ${className}`}>
+        <Image
+          src={logo}
+          alt={name}
+          width={20}
+          height={20}
+          className="object-contain w-full h-full"
+        />
+      </span>
+    )
+  }
+
   switch (name) {
     case 'Smartphone':
       return <Smartphone className={className} />

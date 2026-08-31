@@ -35,30 +35,12 @@ export const OrbitPlanetNode: React.FC<OrbitPlanetNodeProps> = ({
         transform: `translate3d(${x}px, ${y}px, 0)`,
       }}
     >
-      {isHovered && (
-        <svg
-          className="absolute top-0 left-0 overflow-visible pointer-events-none z-10"
-          style={{ width: '1px', height: '1px' }}
-        >
-          <line
-            x1="0"
-            y1="0"
-            x2={-x}
-            y2={-y}
-            stroke={planet.color}
-            strokeWidth="1.5"
-            strokeDasharray="4 3"
-            className="opacity-70"
-          />
-        </svg>
-      )}
-
       <div className="relative flex items-center justify-center -translate-x-1/2 -translate-y-1/2">
         <button
           onMouseEnter={() => onHover(planet)}
           onMouseLeave={() => onHover(null)}
           onClick={() => onClick(planet)}
-          className={`relative rounded-full flex items-center justify-center transition-all duration-300 group cursor-pointer ${
+          className={`relative rounded-xl flex items-center justify-center transition-all duration-300 group cursor-pointer ${
             isHovered || isSelected ? 'scale-125 z-40' : 'hover:scale-115'
           }`}
           style={{
@@ -73,12 +55,12 @@ export const OrbitPlanetNode: React.FC<OrbitPlanetNodeProps> = ({
           }}
         >
           <div
-            className="absolute inset-0 rounded-full animate-ping opacity-25"
+            className="absolute inset-0 rounded-xl animate-ping opacity-25"
             style={{ backgroundColor: planet.color }}
           />
 
-          <div style={{ color: planet.color }}>
-            <PlanetIcon name={planet.iconName} />
+          <div style={{ color: planet.color }} className="flex items-center justify-center p-1.5 w-full h-full">
+            <PlanetIcon name={planet.name} className="w-full h-full max-w-[24px] max-h-[24px]" />
           </div>
         </button>
 

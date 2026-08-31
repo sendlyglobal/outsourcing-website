@@ -5,7 +5,6 @@ import { WebTechPlanet, ThemeProps, TechDomain } from '@/types/animation'
 import { allTechPlanets, domainMeta } from '@/lib/data'
 import { OrbitHeader } from './orbit/OrbitHeader'
 import { OrbitControls } from './orbit/OrbitControls'
-import { OrbitTelemetryCounter } from './orbit/OrbitTelemetryCounter'
 import { OrbitCoreStar } from './orbit/OrbitCoreStar'
 import { OrbitPlanetNode } from './orbit/OrbitPlanetNode'
 import { PlanetTelemetryDrawer } from './orbit/PlanetTelemetryDrawer'
@@ -147,11 +146,6 @@ export const WebOrbitPage: React.FC<WebOrbitProps> = ({
         setSpeedMultiplier={setSpeedMultiplier}
       />
 
-      <OrbitTelemetryCounter
-        isDark={isDark}
-        filteredCount={filteredPlanets.length}
-        totalCount={domainPlanets.length}
-      />
 
       <div className="w-full h-full flex items-center justify-center relative">
         <div className="relative w-0 h-0 flex items-center justify-center">
