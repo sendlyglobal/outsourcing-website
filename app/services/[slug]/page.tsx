@@ -26,6 +26,13 @@ export default function ServiceDetailPage() {
     <div className="w-full flex flex-col">
       <section className="relative w-full overflow-hidden pt-16 pb-14 sm:pt-20 sm:pb-18 dark:bg-black px-6 sm:px-10 md:px-14 lg:px-20">
         <div className="max-w-5xl mx-auto">
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider text-(--teal) hover:underline mb-6 cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Services</span>
+          </Link>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -46,12 +53,21 @@ export default function ServiceDetailPage() {
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button
-                variant="secondary"
+                variant="primary"
                 size="md"
                 onClick={() => openQuoteModal(service.id)}
                 className="w-full sm:w-auto min-w-40"
               >
                 Schedule Consultation
+              </Button>
+
+              <Button
+                variant="secondary"
+                size="md"
+                href="/case-studies"
+                className="w-full sm:w-auto min-w-40"
+              >
+                View Relevant Case Studies
               </Button>
             </div>
           </motion.div>

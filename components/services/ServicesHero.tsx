@@ -10,7 +10,7 @@ export default function ServicesHero() {
   const { openQuoteModal } = useQuoteModal();
 
   return (
-    <section className="relative w-full overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-14 md:pt-24 md:pb-16 dark:bg-black px-6 sm:px-10 md:px-14 lg:px-20">
+    <section className="relative w-full overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-14 md:pt-24 md:pb-16 dark:bg-black px-6 sm:px-10 md:px-14 lg:px-20 border-b border-(--border-color)">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-14 lg:gap-10 items-center">
           <div className="lg:col-span-7 flex flex-col items-start text-left max-w-2xl">
@@ -20,7 +20,7 @@ export default function ServicesHero() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="font-mono text-xs uppercase tracking-widest text-(--teal) font-semibold mb-3"
             >
-              DELIVERING EXCELLENCE AND SOLUTION
+              ENGINEERING & CONSULTING SERVICES
             </motion.span>
 
             <motion.h1
@@ -31,9 +31,9 @@ export default function ServicesHero() {
                 delay: 0.1,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-(--text-primary) leading-[1.15] font-display capitalize"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-(--text-primary) leading-[1.12] font-display"
             >
-              Scalable software solutions for enterprise efficiency
+              Software Development Services
             </motion.h1>
 
             <motion.p
@@ -46,14 +46,7 @@ export default function ServicesHero() {
               }}
               className="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-(--text-secondary) leading-relaxed max-w-xl"
             >
-             Our Services Team pulsates with
-              a singular purpose: to forge transformative, lasting value for our
-              clients. We specialize in crafting intelligent, scalable, and
-              custom software solutions that streamline operations, bridge data
-              silos, and accelerate decision-making. Driven by a culture of
-              integrity, collaboration, and relentless improvement, we don’t
-              just build software,we engineer success, tailored precisely to
-              your enterprise ambitions.
+              We provide software development services across product development, enterprise systems, cloud, modernization, and technical support. We can own a complete project or work alongside an existing engineering team.
             </motion.p>
 
             <motion.div
@@ -69,19 +62,19 @@ export default function ServicesHero() {
               <Button
                 variant="primary"
                 size="md"
-                onClick={() => openQuoteModal("erp-development")}
-                className="w-full sm:w-auto min-w-37.5"
+                onClick={() => openQuoteModal()}
+                className="w-full sm:w-auto min-w-[170px]"
               >
-                Get Started
+                Start a Project
               </Button>
 
               <Button
                 variant="secondary"
                 size="md"
                 href="/case-studies"
-                className="w-full sm:w-auto min-w-37.5"
+                className="w-full sm:w-auto min-w-[170px]"
               >
-                View Products
+                View Our Work
               </Button>
             </motion.div>
           </div>
@@ -95,7 +88,7 @@ export default function ServicesHero() {
             <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-(--border-color) shadow-2xl shadow-black/15 dark:shadow-[0_20px_50px_rgba(10,138,158,0.15)] bg-slate-900 group">
               <Image
                 src="/images/services_erp_analytics.jpg"
-                alt="Scalable ERP solutions and enterprise analytics dashboard"
+                alt="Software Development Services"
                 fill
                 priority
                 className="object-cover transition-transform duration-700 group-hover:scale-105"

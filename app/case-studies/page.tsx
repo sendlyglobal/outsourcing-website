@@ -3,21 +3,24 @@ import React from 'react'
 import CaseStudiesList from '@/components/case-studies/CaseStudiesList'
 
 export const metadata: Metadata = {
-  title: 'Featured Outcomes & Case Studies | TechNexus Solutions',
+  title: 'Our Work | RiseUp Engineering',
   description:
-    'Discover how we engineer robust, scalable software architectures and production-grade digital solutions tailored to solve mission-critical enterprise challenges.',
+    'Our work shows the kind of problems we can solve. Each project explains what the problem was, what we built, how we built it, and the result.',
 }
 
 export default function CaseStudiesPage() {
   return (
-    <div className="w-full flex flex-col min-h-[calc(100vh-4rem)] pb-20 sm:pb-28">
-      <section className="relative w-full pt-14 pb-8 sm:pt-20 sm:pb-12 dark:bg-black px-6 sm:px-10 md:px-14 lg:px-20 text-center border-b border-(--border-color)">
+    <div className="w-full flex flex-col min-h-[calc(100vh-4rem)] pb-20 sm:pb-28 bg-white dark:bg-black">
+      <section className="relative w-full pt-16 pb-12 sm:pt-22 sm:pb-16 dark:bg-black px-6 sm:px-10 md:px-14 lg:px-20 text-center border-b border-(--border-color)">
         <div className="max-w-4xl mx-auto">
+          <span className="font-mono text-xs uppercase tracking-widest text-(--teal) font-semibold block mb-2.5">
+            PROVEN ENGINEERING PORTFOLIO
+          </span>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-(--text-primary) font-display leading-[1.12]">
-            Featured Outcomes
+            Our Work
           </h1>
           <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg text-(--text-secondary) leading-relaxed max-w-2xl mx-auto">
-            Discover how we engineer robust, scalable software architectures and production-grade digital solutions tailored to solve mission-critical enterprise challenges.
+            Our work shows the kind of problems we can solve. Each project explains what the problem was, what we built, how we built it, and the result.
           </p>
         </div>
       </section>

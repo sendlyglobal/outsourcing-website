@@ -23,7 +23,7 @@ export interface CaseStudy {
   featuredMetric?: {
     label: string
     value: string
-    iconName?: 'gauge' | 'users' | 'rocket' | 'chart'
+    iconName?: 'gauge' | 'users' | 'rocket' | 'chart' | 'zap' | 'server' | 'cloud' | 'workflow' | 'sparkles' | string
   }
   tags?: string[]
   outcomeMetrics?: OutcomeMetric[]
@@ -47,7 +47,7 @@ export interface CaseStudy {
     subFeatures?: {
       title: string
       description: string
-      icon: 'cpu' | 'cloud' | 'shield' | 'database'
+      icon: 'cpu' | 'cloud' | 'shield' | 'database' | 'server' | 'code' | 'git' | 'workflow' | 'sparkles' | string
     }[]
   }
   result: {

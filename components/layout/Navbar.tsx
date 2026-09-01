@@ -13,8 +13,11 @@ import {
   Layers,
   Smartphone,
   Globe,
-  Cpu,
-  ArrowRight,
+  Server,
+  Cloud,
+  Sparkles,
+  GitMerge,
+  ShieldCheck,
   ChevronRight,
 } from "lucide-react";
 import { useQuoteModal } from "@/providers/QuoteModalProvider";
@@ -22,28 +25,52 @@ import { Button } from "../ui";
 
 const SERVICES_LIST = [
   {
-    title: "ERP Development",
-    slug: "/services/erp-development",
-    desc: "Enterprise resource planning & system integrations",
-    icon: Layers,
-  },
-  {
-    title: "Mobile Apps",
-    slug: "/services/mobile-development",
-    desc: "Native iOS/Android & cross-platform apps",
-    icon: Smartphone,
-  },
-  {
-    title: "Web Platforms",
+    title: "Web Development",
     slug: "/services/web-development",
-    desc: "High-throughput web applications & cloud portals",
+    desc: "Responsive web apps, portals, dashboards & SaaS systems",
     icon: Globe,
   },
   {
-    title: "Custom Systems",
-    slug: "/services/custom-software",
-    desc: "Bespoke architectures solving complex workflows",
-    icon: Cpu,
+    title: "Mobile Development",
+    slug: "/services/mobile-development",
+    desc: "iOS, Android & cross-platform Flutter / React Native apps",
+    icon: Smartphone,
+  },
+  {
+    title: "Backend & APIs",
+    slug: "/services/backend-api-development",
+    desc: "REST/gRPC microservices, authentication & integrations",
+    icon: Server,
+  },
+  {
+    title: "Enterprise Software",
+    slug: "/services/enterprise-software",
+    desc: "Business-critical systems, ERPs, ledgers & workflow tools",
+    icon: Layers,
+  },
+  {
+    title: "Cloud & DevOps",
+    slug: "/services/cloud-devops",
+    desc: "Cloud infrastructure, Kubernetes, CI/CD & auto-scaling",
+    icon: Cloud,
+  },
+  {
+    title: "AI & Automation",
+    slug: "/services/ai-automation",
+    desc: "Intelligent assistants, OCR document parsing & workflows",
+    icon: Sparkles,
+  },
+  {
+    title: "Software Modernization",
+    slug: "/services/software-modernization",
+    desc: "Microservices transition, cloud migration & refactoring",
+    icon: GitMerge,
+  },
+  {
+    title: "QA & Testing",
+    slug: "/services/qa-testing",
+    desc: "Automated E2E testing, security audits & load testing",
+    icon: ShieldCheck,
   },
 ];
 
@@ -98,12 +125,11 @@ export default function Navbar() {
   const handleServicesEnter = () => {
     if (servicesTimeoutRef.current) clearTimeout(servicesTimeoutRef.current);
     if (techTimeoutRef.current) clearTimeout(techTimeoutRef.current);
-    setTechOpen(false);
     setServicesOpen(true);
+    setTechOpen(false);
   };
 
   const handleServicesLeave = () => {
-    if (servicesTimeoutRef.current) clearTimeout(servicesTimeoutRef.current);
     servicesTimeoutRef.current = setTimeout(() => {
       setServicesOpen(false);
     }, 200);
@@ -112,26 +138,20 @@ export default function Navbar() {
   const handleTechEnter = () => {
     if (techTimeoutRef.current) clearTimeout(techTimeoutRef.current);
     if (servicesTimeoutRef.current) clearTimeout(servicesTimeoutRef.current);
-    setServicesOpen(false);
     setTechOpen(true);
+    setServicesOpen(false);
   };
 
   const handleTechLeave = () => {
-    if (techTimeoutRef.current) clearTimeout(techTimeoutRef.current);
     techTimeoutRef.current = setTimeout(() => {
       setTechOpen(false);
     }, 200);
   };
 
   useEffect(() => {
-    return () => {
-      if (servicesTimeoutRef.current) clearTimeout(servicesTimeoutRef.current);
-      if (techTimeoutRef.current) clearTimeout(techTimeoutRef.current);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
     };
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -199,7 +219,7 @@ export default function Navbar() {
             </Link>
 
             <div
-              className="relative py-2"
+              className="py-2"
               onMouseEnter={handleServicesEnter}
               onMouseLeave={handleServicesLeave}
             >
@@ -223,39 +243,38 @@ export default function Navbar() {
 
               {servicesOpen && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 w-[720px] z-50 animate-fadeIn"
+                  className="fixed top-18 left-1/2 -translate-x-1/2 pt-2.5 w-[1140px] max-w-[calc(100vw-32px)] z-50 animate-fadeIn"
                   onMouseEnter={handleServicesEnter}
                   onMouseLeave={handleServicesLeave}
                 >
                   <div className="relative rounded-2xl border shadow-2xl overflow-hidden bg-white dark:bg-black border-(--border-color) before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
                     <div className="flex">
                       <div
-                        className="w-[250px] shrink-0 p-7 flex flex-col justify-between border-r border-(--border-color)"
+                        className="w-[230px] shrink-0 p-6 flex flex-col justify-between border-r border-(--border-color)"
                         style={{
                           backgroundColor:
                             "color-mix(in srgb, var(--teal) 10%, var(--bg-primary))",
                         }}
                       >
                         <div>
-                          <h3 className="text-[15px] font-bold text-(--text-primary) leading-snug">
+                          <h3 className="text-[15px] font-bold text-(--text-primary) leading-snug font-display">
                             Explore Our Services
                           </h3>
-                          <p className="mt-3 text-xs text-(--text-secondary) leading-relaxed">
+                          <p className="mt-2.5 text-xs text-(--text-secondary) leading-relaxed">
                             From enterprise systems to high-performance mobile &
-                            web platforms. We build solutions tailored to your
-                            goals.
+                            web platforms.
                           </p>
                         </div>
 
                         <Link
                           href="/services"
-                          className="mt-7 inline-flex items-center justify-center gap-2 h-10 px-5 rounded-full bg-(--teal) text-white text-xs font-semibold hover:brightness-110 transition-all"
+                          className="mt-6 inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full bg-(--teal) text-white text-xs font-semibold hover:brightness-110 transition-all shadow-sm"
                         >
                           View all services
                         </Link>
                       </div>
 
-                      <div className="flex-1 p-5 grid grid-cols-2 gap-3">
+                      <div className="flex-1 p-4 grid grid-cols-4 gap-2.5">
                         {SERVICES_LIST.map((service) => {
                           const Icon = service.icon;
                           const isActive = pathname === service.slug;
@@ -264,25 +283,25 @@ export default function Navbar() {
                             <Link
                               key={service.slug}
                               href={service.slug}
-                              className={`group flex flex-col gap-3.5 p-5 rounded-xl border transition-all duration-200 ${
+                              className={`group flex flex-col gap-2.5 p-3 rounded-xl border transition-all duration-200 ${
                                 isActive
                                   ? "border-(--teal)/40 bg-(--teal)/8"
-                                  : "border-transparent hover:border-(--border-color) hover:bg-(--border-color)/25 dark:hover:bg-white/5"
+                                  : "border-transparent hover:border-(--border-color) hover:bg-(--border-color)/20 dark:hover:bg-white/5"
                               }`}
                             >
                               <div
-                                className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-colors ${
+                                className={`w-8.5 h-8.5 rounded-lg flex items-center justify-center border transition-colors ${
                                   isActive
                                     ? "bg-(--teal)/15 border-(--teal)/40 text-(--teal)"
-                                    : "bg-(--bg-primary) border-(--border-color) text-(--teal) group-hover:border-(--teal)"
+                                    : "bg-(--bg-primary) border-(--border-color) text-(--teal) group-hover:border-(--teal) group-hover:bg-(--teal) group-hover:text-white"
                                 }`}
                               >
-                                <Icon size={18} />
+                                <Icon size={16} />
                               </div>
 
                               <div>
                                 <div
-                                  className={`text-base font-bold leading-tight transition-colors ${
+                                  className={`text-xs font-bold leading-tight transition-colors ${
                                     isActive
                                       ? "text-(--teal)"
                                       : "text-(--text-primary) group-hover:text-(--teal)"
@@ -290,7 +309,7 @@ export default function Navbar() {
                                 >
                                   {service.title}
                                 </div>
-                                <div className="text-[11px] text-(--text-secondary) mt-1.5 leading-snug line-clamp-2">
+                                <div className="text-[10.5px] text-(--text-secondary) mt-1 leading-snug line-clamp-2">
                                   {service.desc}
                                 </div>
                               </div>
@@ -305,7 +324,7 @@ export default function Navbar() {
             </div>
 
             <div
-              className="relative py-2"
+              className="py-2"
               onMouseEnter={handleTechEnter}
               onMouseLeave={handleTechLeave}
             >
@@ -329,7 +348,7 @@ export default function Navbar() {
 
               {techOpen && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 w-[780px] z-50 animate-fadeIn"
+                  className="fixed top-18 left-1/2 -translate-x-1/2 pt-2.5 w-[780px] max-w-[calc(100vw-32px)] z-50 animate-fadeIn"
                   onMouseEnter={handleTechEnter}
                   onMouseLeave={handleTechLeave}
                 >
@@ -353,31 +372,15 @@ export default function Navbar() {
                                 ))}
                               </div>
                             </div>
-
-                            <div className="mt-4 pt-3 border-t border-(--border-color)/50">
-                              <Link
-                                href={sec.href}
-                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) hover:text-(--aqua) transition-all group font-mono"
-                              >
-                                <span>See details</span>
-                                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                              </Link>
-                            </div>
+                            <Link
+                              href={sec.href}
+                              className="mt-4 text-xs font-semibold text-(--teal) hover:text-(--aqua) inline-flex items-center gap-1"
+                            >
+                              <span>Explore Stack</span>
+                              <ChevronRight size={12} />
+                            </Link>
                           </div>
                         ))}
-                      </div>
-
-                      <div className="mt-6 pt-4 border-t border-(--border-color) flex items-center justify-between">
-                        <p className="text-xs text-(--text-secondary)">
-                          Production-grade engineering across enterprise stacks.
-                        </p>
-                        <Link
-                          href="/technologies"
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) hover:text-(--aqua) transition-colors font-mono"
-                        >
-                          <span>All Technologies</span>
-                          <ArrowRight size={13} />
-                        </Link>
                       </div>
                     </div>
                   </div>
@@ -386,7 +389,7 @@ export default function Navbar() {
             </div>
 
             {NAV_LINKS.map((link) => {
-              const isActive = pathname.startsWith(link.href);
+              const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
@@ -494,7 +497,7 @@ export default function Navbar() {
               </button>
 
               {mobileServicesOpen && (
-                <div className="px-3 pb-3 grid grid-cols-1 gap-1.5 border-t border-(--border-color)">
+                <div className="px-3 pb-3 grid grid-cols-1 gap-1.5 border-t border-(--border-color) max-h-[340px] overflow-y-auto">
                   {SERVICES_LIST.map((service) => {
                     const Icon = service.icon;
                     const isActive = pathname === service.slug;
@@ -510,20 +513,20 @@ export default function Navbar() {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-(--bg-primary) border border-(--border-color) flex items-center justify-center text-(--teal) shrink-0">
-                            <Icon size={16} />
+                          <div className="w-8.5 h-8.5 rounded-lg bg-(--bg-primary) border border-(--border-color) flex items-center justify-center text-(--teal) shrink-0">
+                            <Icon size={15} />
                           </div>
                           <div>
-                            <div className="text-sm font-medium leading-tight">
+                            <div className="text-xs font-bold leading-tight">
                               {service.title}
                             </div>
-                            <div className="text-[11px] text-(--text-muted) line-clamp-1 mt-0.5">
+                            <div className="text-[10px] text-(--text-muted) line-clamp-1 mt-0.5">
                               {service.desc}
                             </div>
                           </div>
                         </div>
                         <ChevronRight
-                          size={15}
+                          size={14}
                           className="text-(--text-muted) shrink-0"
                         />
                       </Link>
@@ -552,86 +555,74 @@ export default function Navbar() {
               </button>
 
               {mobileTechOpen && (
-                <div className="px-4 pb-4 space-y-4 border-t border-(--border-color) pt-3">
+                <div className="px-4 pb-4 space-y-4 border-t border-(--border-color)">
                   {TECH_SECTIONS.map((sec) => (
-                    <div key={sec.id} className="space-y-1.5">
-                      <div className="text-xs font-bold text-(--text-primary) font-display">
-                        {sec.title}
+                    <div key={sec.id} className="pt-3 first:pt-2">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-(--text-primary)">
+                          {sec.title}
+                        </span>
+                        <Link
+                          href={sec.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="text-[11px] font-semibold text-(--teal)"
+                        >
+                          Explore Stack →
+                        </Link>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5">
                         {sec.techs.map((tech) => (
                           <span
                             key={tech}
-                            className="font-mono text-[11px] px-2.5 py-1 rounded bg-(--border-color)/30 text-(--text-secondary)"
+                            className="px-2 py-0.5 rounded text-[10px] font-mono bg-(--bg-primary) border border-(--border-color) text-(--text-secondary)"
                           >
                             {tech}
                           </span>
                         ))}
                       </div>
-                      <Link
-                        href={sec.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-(--teal) mt-1 font-mono"
-                      >
-                        <span>See details</span>
-                        <ArrowRight size={11} />
-                      </Link>
                     </div>
                   ))}
-
-                  <div className="pt-2 border-t border-(--border-color)">
-                    <Link
-                      href="/technologies"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--teal) font-mono"
-                    >
-                      <span>All Technologies</span>
-                      <ArrowRight size={13} />
-                    </Link>
-                  </div>
                 </div>
               )}
             </div>
 
-            <div className="space-y-1">
-              {NAV_LINKS.map((link) => {
-                const isActive = pathname.startsWith(link.href);
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between py-3.5 px-4 rounded-xl text-base font-semibold transition-all ${
-                      isActive
-                        ? "bg-(--teal)/10 text-(--teal)"
-                        : "text-(--text-primary) hover:bg-(--border-color)/20"
-                    }`}
-                  >
-                    <span>{link.title}</span>
-                    <ChevronRight
-                      size={16}
-                      className={
-                        isActive ? "text-(--teal)" : "text-(--text-muted)"
-                      }
-                    />
-                  </Link>
-                );
-              })}
-            </div>
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center justify-between py-3.5 px-4 rounded-xl text-base font-semibold transition-all ${
+                    isActive
+                      ? "bg-(--teal)/10 text-(--teal)"
+                      : "text-(--text-primary) hover:bg-(--border-color)/20"
+                  }`}
+                >
+                  <span>{link.title}</span>
+                  <ChevronRight
+                    size={16}
+                    className={
+                      isActive ? "text-(--teal)" : "text-(--text-muted)"
+                    }
+                  />
+                </Link>
+              );
+            })}
           </div>
 
-          <div
-            className="p-5 border-t space-y-3 border-(--border-color)"
-          >
+          <div className="p-5 border-t border-(--border-color) bg-(--bg-card)/40">
             <Button
-              variant="quote"
-              fullWidth
+              variant="primary"
               size="lg"
               onClick={() => {
                 setMobileMenuOpen(false);
                 openQuoteModal();
               }}
-            />
+              className="w-full justify-center"
+            >
+              Get a Quote
+            </Button>
           </div>
         </div>
       )}

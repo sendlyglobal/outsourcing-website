@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'motion/react'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { CASE_STUDIES } from '@/lib/case-studies'
 
 export default function OutcomesSection() {
@@ -20,11 +20,14 @@ export default function OutcomesSection() {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
+            <span className="font-mono text-xs uppercase tracking-widest text-(--teal) font-semibold block mb-2">
+              FEATURED WORK
+            </span>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-(--text-primary) font-display">
-              Featured Outcomes
+              Real Projects, Measurable Outcomes
             </h2>
-            <p className="mt-2.5 text-sm sm:text-base text-(--text-secondary)">
-              Measurable impact delivered through rigorous engineering.
+            <p className="mt-2.5 text-sm sm:text-base text-(--text-secondary) max-w-xl">
+              Explore how we design and build production-grade software solutions across web, mobile, and backend architectures.
             </p>
           </motion.div>
 
@@ -32,7 +35,7 @@ export default function OutcomesSection() {
             href="/case-studies"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-(--teal) hover:text-(--aqua) transition-colors font-mono"
           >
-            <span>View All Cases</span>
+            <span>View All Work</span>
             <ArrowRight size={15} />
           </Link>
         </div>
@@ -46,10 +49,7 @@ export default function OutcomesSection() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              <Link
-                href={`/case-studies/${study.slug}`}
-                className="group block h-full rounded-2xl border border-(--border-color) bg-white dark:bg-black hover:border-(--teal) transition-all duration-300 shadow-sm hover:shadow-xl overflow-hidden flex flex-col justify-between"
-              >
+              <div className="group h-full rounded-2xl border border-(--border-color) bg-white dark:bg-black hover:border-(--teal) transition-all duration-300 shadow-sm hover:shadow-xl overflow-hidden flex flex-col justify-between">
                 <div>
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-900">
                     <Image
@@ -60,7 +60,9 @@ export default function OutcomesSection() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-
+                    <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider text-white border border-white/10">
+                      {study.industry}
+                    </div>
                   </div>
 
                   <div className="p-6 sm:p-7">
@@ -72,25 +74,33 @@ export default function OutcomesSection() {
                       {study.title}
                     </h3>
 
-                    <p className="mt-3 text-xs sm:text-sm text-(--text-secondary) leading-relaxed line-clamp-3">
+                    <p className="mt-3 text-xs sm:text-sm text-(--text-secondary) leading-relaxed">
                       {study.summary}
                     </p>
                   </div>
                 </div>
 
                 <div className="p-6 sm:p-7 pt-0">
-                  <div className="pt-4 border-t border-(--border-color) flex flex-wrap gap-2">
+                  <div className="pt-4 border-t border-(--border-color) flex flex-wrap gap-1.5 mb-5">
                     {study.technologies.slice(0, 4).map((tech) => (
                       <span
                         key={tech}
-                        className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-(--border-color)/20 border border-(--border-color) text-(--text-secondary)"
+                        className="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-white/5 border border-(--border-color) text-(--text-secondary)"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
+
+                  <Link
+                    href={`/case-studies/${study.slug}`}
+                    className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-bold font-mono uppercase tracking-wider py-2.5 px-4 rounded-xl bg-slate-950 text-white dark:bg-white dark:text-black hover:bg-(--teal) dark:hover:bg-(--teal) dark:hover:text-white transition-all shadow-sm"
+                  >
+                    <span>View Case Study</span>
+                    <ArrowUpRight size={14} />
+                  </Link>
                 </div>
-              </Link>
+              </div>
             </motion.div>
           ))}
         </div>

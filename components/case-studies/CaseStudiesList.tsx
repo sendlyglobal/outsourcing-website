@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
 import {
-  ArrowRight,
+  ArrowUpRight,
   Layers,
   Smartphone,
   Globe,
@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { CASE_STUDIES } from '@/lib/case-studies'
 
-type FilterCategory = 'all' | 'erp' | 'mobile' | 'web'
+type FilterCategory = 'all' | 'web' | 'mobile' | 'erp' | 'custom'
 
 export default function CaseStudiesList() {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>('all')
@@ -37,25 +37,26 @@ export default function CaseStudiesList() {
   }
 
   const FILTERS: { id: FilterCategory; label: string }[] = [
-    { id: 'all', label: 'All' },
-    { id: 'erp', label: 'ERP' },
-    { id: 'mobile', label: 'Mobile' },
-    { id: 'web', label: 'Web' },
+    { id: 'all', label: 'All Projects' },
+    { id: 'web', label: 'Web Applications' },
+    { id: 'mobile', label: 'Mobile Apps' },
+    { id: 'erp', label: 'Enterprise & ERP' },
+    { id: 'custom', label: 'Backend, Cloud & AI' },
   ]
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-center gap-2.5 sm:gap-3 mb-12 sm:mb-16">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12 sm:mb-16">
         {FILTERS.map((f) => {
           const isActive = activeFilter === f.id
           return (
             <button
               key={f.id}
               onClick={() => setActiveFilter(f.id)}
-              className={`px-5 py-2 rounded-full text-xs font-mono font-bold transition-all duration-200 cursor-pointer ${
+              className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono font-bold transition-all duration-200 cursor-pointer ${
                 isActive
-                  ? 'dark:bg-black bg-white text-(--teal) dark:text-white shadow-md border border-(--teal)'
-                  : 'dark:bg-black text-black dark:text-white border border-(--border-color) hover:border-(--teal)/60 hover:text-(--text-primary)'
+                  ? 'bg-slate-950 text-white dark:bg-white dark:text-black shadow-md border border-slate-950 dark:border-white'
+                  : 'bg-white dark:bg-black text-slate-700 dark:text-slate-300 border border-(--border-color) hover:border-(--teal) hover:text-(--teal)'
               }`}
             >
               {f.label}
@@ -75,10 +76,7 @@ export default function CaseStudiesList() {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.45, delay: idx * 0.06, ease: [0.16, 1, 0.3, 1] }}
             >
-              <Link
-                href={`/case-studies/${study.slug}`}
-                className="group block h-full rounded-2xl border border-(--border-color) bg-white dark:bg-black hover:border-(--teal) transition-all duration-300 shadow-sm hover:shadow-xl overflow-hidden flex flex-col justify-between"
-              >
+              <div className="group h-full rounded-2xl border border-(--border-color) bg-white dark:bg-black hover:border-(--teal) transition-all duration-300 shadow-sm hover:shadow-xl overflow-hidden flex flex-col justify-between">
                 <div>
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-900">
                     <Image
@@ -89,43 +87,64 @@ export default function CaseStudiesList() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-
+                    <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider text-white border border-white/10">
+                      {study.industry}
+                    </div>
                   </div>
 
                   <div className="p-6 sm:p-7">
-                    <div className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-(--teal) font-semibold">
+                    <div className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-(--teal) font-semibold mb-2">
                       {getCategoryIcon(study.category)}
                       <span>{study.categoryLabel}</span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-(--text-primary) font-display mt-2 group-hover:text-(--teal) transition-colors leading-snug">
+                    <h3 className="text-xl font-bold text-(--text-primary) font-display group-hover:text-(--teal) transition-colors leading-snug">
                       {study.title}
                     </h3>
 
-                    <p className="mt-3 text-xs sm:text-sm text-(--text-secondary) leading-relaxed">
-                      {study.summary}
-                    </p>
+                    <div className="mt-4 pt-3 border-t border-(--border-color)/50 space-y-2.5">
+                      <div>
+                        <span className="font-mono text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-zinc-500 block">
+                          THE PROBLEM:
+                        </span>
+                        <p className="text-xs text-slate-700 dark:text-zinc-300 leading-relaxed mt-0.5 line-clamp-2">
+                          {study.situation?.paragraphs?.[0] || study.summary}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="font-mono text-[10px] uppercase tracking-wider font-bold text-(--teal) block">
+                          WHAT WE BUILT:
+                        </span>
+                        <p className="text-xs text-slate-700 dark:text-zinc-300 leading-relaxed mt-0.5 line-clamp-2">
+                          {study.solution?.paragraphs?.[0] || study.summary}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div className="p-6 sm:p-7 pt-0">
-                  <div className="pt-4 border-t border-(--border-color) flex flex-wrap gap-2 mb-4">
+                  <div className="pt-4 border-t border-(--border-color) flex flex-wrap gap-1.5 mb-5">
                     {study.technologies.slice(0, 4).map((tech) => (
                       <span
                         key={tech}
-                        className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-(--border-color)/20 border border-(--border-color) text-(--text-secondary)"
+                        className="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-white/5 border border-(--border-color) text-(--text-secondary)"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
 
-                  <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-(--teal) hover:text-(--aqua) group-hover:gap-2.5 transition-all">
-                    <span>Read Case Study</span>
-                    <ArrowRight size={14} />
-                  </div>
+                  <Link
+                    href={`/case-studies/${study.slug}`}
+                    className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-bold font-mono uppercase tracking-wider py-2.5 px-4 rounded-xl bg-slate-950 text-white dark:bg-white dark:text-black hover:bg-(--teal) dark:hover:bg-(--teal) dark:hover:text-white transition-all shadow-sm"
+                  >
+                    <span>View Case Study</span>
+                    <ArrowUpRight size={14} />
+                  </Link>
                 </div>
-              </Link>
+              </div>
             </motion.div>
           ))}
         </AnimatePresence>
