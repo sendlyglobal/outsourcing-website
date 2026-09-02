@@ -1,32 +1,28 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { 
   X, 
-  ChevronLeft,
-  ChevronDown,
-  CheckCircle2
+  ChevronLeft, 
+  ChevronDown
 } from 'lucide-react'
 import { Button, Input } from '@/components/ui'
+import Cal from '@calcom/embed-react'
 
-const Cal = dynamic(
-  () => import('@calcom/embed-react').then((mod) => mod.default),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-[420px] flex items-center justify-center text-xs font-mono text-(--text-muted)">
-        Loading scheduler...
-      </div>
-    ),
-  }
-)
-
-export type ProjectType = 'erp' | 'mobile' | 'web' | 'custom'
+export type ProjectType =
+  | 'web-development'
+  | 'mobile-development'
+  | 'backend-api-development'
+  | 'enterprise-software'
+  | 'cloud-devops'
+  | 'ai-automation'
+  | 'software-modernization'
+  | 'qa-testing'
+  | 'custom'
 
 interface QuoteModalProps {
   isOpen: boolean
@@ -41,28 +37,93 @@ interface ProjectOption {
   eventSlug: string
 }
 
+export function normalizeProjectType(type?: string): ProjectType {
+  if (!type) return 'web-development'
+  const normalized = type.toLowerCase().trim()
+
+  if (normalized.includes('mobile') || normalized === 'ios' || normalized === 'android' || normalized === 'flutter') {
+    return 'mobile-development'
+  }
+  if (normalized.includes('backend') || normalized.includes('api') || normalized === 'apis') {
+    return 'backend-api-development'
+  }
+  if (normalized.includes('enterprise') || normalized.includes('erp') || normalized === 'sap' || normalized === 'odoo') {
+    return 'enterprise-software'
+  }
+  if (normalized.includes('cloud') || normalized.includes('devops') || normalized.includes('kubernetes')) {
+    return 'cloud-devops'
+  }
+  if (normalized.includes('ai') || normalized.includes('automation') || normalized.includes('ml')) {
+    return 'ai-automation'
+  }
+  if (normalized.includes('modern') || normalized.includes('legacy') || normalized.includes('refactor')) {
+    return 'software-modernization'
+  }
+  if (normalized.includes('qa') || normalized.includes('test') || normalized.includes('testing')) {
+    return 'qa-testing'
+  }
+  if (normalized === 'custom' || normalized.includes('bespoke')) {
+    return 'custom'
+  }
+  if (normalized.includes('web') || normalized.includes('frontend') || normalized.includes('design') || normalized.includes('portal')) {
+    return 'web-development'
+  }
+
+  return 'web-development'
+}
+
 const PROJECT_OPTIONS: ProjectOption[] = [
   {
-    id: 'erp',
-    title: 'ERP Development',
-    desc: 'Supply chain, SAP/Odoo/custom integrations',
+    id: 'web-development',
+    title: 'Web Development',
+    desc: 'Responsive web apps, customer portals, dashboards & SaaS systems',
     eventSlug: 'globnetics',
   },
   {
-    id: 'mobile',
-    title: 'Mobile App',
-    desc: 'Native iOS/Android or cross-platform apps',
+    id: 'mobile-development',
+    title: 'Mobile Development',
+    desc: 'Native iOS/Android & cross-platform apps',
     eventSlug: 'globnetics',
   },
   {
-    id: 'web',
-    title: 'Web Platform',
-    desc: 'High-throughput portals & cloud architecture',
+    id: 'backend-api-development',
+    title: 'Backend & APIs',
+    desc: 'Microservices, REST/gRPC APIs & authentication systems',
+    eventSlug: 'globnetics',
+  },
+  {
+    id: 'enterprise-software',
+    title: 'Enterprise Software & ERP',
+    desc: 'Business-critical systems, custom ERPs & workflows',
+    eventSlug: 'globnetics',
+  },
+  {
+    id: 'cloud-devops',
+    title: 'Cloud & DevOps',
+    desc: 'Cloud infrastructure, Kubernetes, CI/CD & auto-scaling',
+    eventSlug: 'globnetics',
+  },
+  {
+    id: 'ai-automation',
+    title: 'AI & Automation',
+    desc: 'Intelligent assistants, document OCR & automated workflows',
+    eventSlug: 'globnetics',
+  },
+  {
+    id: 'software-modernization',
+    title: 'Software Modernization',
+    desc: 'Microservices transition, cloud migration & refactoring',
+    eventSlug: 'globnetics',
+  },
+  {
+    id: 'qa-testing',
+    title: 'QA & Testing',
+    desc: 'Automated E2E testing, security audits & load testing',
     eventSlug: 'globnetics',
   },
   {
     id: 'custom',
-    title: 'Custom Systems',
+    title: 'Custom Systems & Architecture',
     desc: 'Bespoke architectures & complex workflows',
     eventSlug: 'globnetics',
   },
@@ -72,22 +133,30 @@ const qualifySchema = z.object({
   name: z.string().min(2, 'Please enter your full name'),
   email: z.string().email('Please enter a valid work email address'),
   company: z.string().min(2, 'Please enter your company name'),
-  projectType: z.enum(['erp', 'mobile', 'web', 'custom']),
+  projectType: z.enum([
+    'web-development',
+    'mobile-development',
+    'backend-api-development',
+    'enterprise-software',
+    'cloud-devops',
+    'ai-automation',
+    'software-modernization',
+    'qa-testing',
+    'custom',
+  ]),
   notes: z.string().optional(),
 })
 
 type QualifyFormData = z.infer<typeof qualifySchema>
 
-export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp' }: QuoteModalProps) {
+export default function QuoteModal({ isOpen, onClose, initialProjectType = 'web-development' }: QuoteModalProps) {
   const router = useRouter()
   const modalRef = useRef<HTMLDivElement>(null)
 
   const [step, setStep] = useState<'qualify' | 'schedule' | 'confirmed'>('qualify')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const validProjectType = (['erp', 'mobile', 'web', 'custom'].includes(initialProjectType)
-    ? initialProjectType
-    : 'erp') as ProjectType
+  const normalizedDefault = normalizeProjectType(initialProjectType)
 
   const {
     register,
@@ -102,7 +171,7 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
       name: '',
       email: '',
       company: '',
-      projectType: validProjectType,
+      projectType: normalizedDefault,
       notes: '',
     },
   })
@@ -114,10 +183,11 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
   const watchedNotes = watch('notes')
 
   useEffect(() => {
-    if (initialProjectType && ['erp', 'mobile', 'web', 'custom'].includes(initialProjectType)) {
-      setValue('projectType', initialProjectType as ProjectType)
+    if (isOpen && initialProjectType) {
+      const norm = normalizeProjectType(initialProjectType)
+      setValue('projectType', norm)
     }
-  }, [initialProjectType, setValue])
+  }, [isOpen, initialProjectType, setValue])
 
   useEffect(() => {
     if (!isOpen) return
@@ -309,52 +379,29 @@ export default function QuoteModal({ isOpen, onClose, initialProjectType = 'erp'
             <div className="w-full space-y-3">
               <div className="w-full h-[420px] sm:h-[450px] rounded-xl overflow-hidden border border-(--border-color) bg-white dark:bg-black">
                 <Cal
-                  calLink={activeOption.eventSlug || 'globnetics'}
+                  calLink="globnetics?timeZone=America/New_York"
                   style={{ width: '100%', height: '100%', overflow: 'auto' }}
                   config={{
                     name: watchedName,
                     email: watchedEmail,
                     notes: `${watchedCompany ? `Company: ${watchedCompany}. ` : ''}${watchedNotes || ''}`,
                     theme: 'auto',
+                    timeZone: 'America/New_York',
                   }}
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-0.5 text-xs text-(--text-muted)">
-                <span>Direct 30-minute discovery session with Principal Solutions Architect.</span>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 px-1 text-xs text-(--text-muted)">
+                <span>
+                  Selected domain: <strong className="text-(--text-primary)">{activeOption.title}</strong>
+                </span>
                 <button
                   type="button"
                   onClick={handleNavigateToContact}
-                  className="text-(--teal) hover:underline font-medium cursor-pointer"
+                  className="text-(--teal) hover:underline cursor-pointer"
                 >
-                  Need a custom time? Contact us
+                  Need a custom time slot? Contact us directly
                 </button>
-              </div>
-            </div>
-          )}
-
-          {step === 'confirmed' && (
-            <div className="text-center py-6 space-y-4">
-              <div className="w-14 h-14 rounded-full bg-(--teal)/10 text-(--teal) flex items-center justify-center mx-auto border border-(--teal)/20">
-                <CheckCircle2 className="w-7 h-7" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-(--text-primary) font-display">
-                  Discovery Session Confirmed!
-                </h3>
-                <p className="text-xs sm:text-sm text-(--text-secondary) mt-2 max-w-md mx-auto leading-relaxed">
-                  Thank you, <span className="font-semibold text-(--text-primary)">{watchedName || 'there'}</span>. A calendar invitation and video conference link have been sent to <span className="font-mono font-medium text-(--teal)">{watchedEmail}</span>.
-                </p>
-              </div>
-
-              <div className="pt-4">
-                <Button
-                  type="button"
-                  size="md"
-                  onClick={handleResetAndClose}
-                >
-                  Done
-                </Button>
               </div>
             </div>
           )}

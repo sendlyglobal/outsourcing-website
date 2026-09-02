@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, XIcon } from 'lucide-react'
 import { WebTechPlanet } from '@/types/animation'
 import { PlanetIcon } from './PlanetIcon'
 
@@ -72,7 +72,7 @@ export const PlanetTelemetryDrawer: React.FC<PlanetTelemetryDrawerProps> = ({
                   : 'hover:bg-zinc-100 text-zinc-600'
               }`}
             >
-              ✕
+              <XIcon className='w-5 h-5'/>
             </button>
           </div>
 
@@ -81,39 +81,6 @@ export const PlanetTelemetryDrawer: React.FC<PlanetTelemetryDrawerProps> = ({
           >
             {planet.description}
           </p>
-
-          <div
-            className={`p-3 rounded-xl border space-y-1.5 text-xs font-mono ${
-              isDark
-                ? 'bg-zinc-950 border-zinc-800'
-                : 'bg-zinc-50 border-zinc-200'
-            }`}
-          >
-            <div className="flex justify-between">
-              <span className={isDark ? 'text-zinc-500' : 'text-zinc-400'}>
-                Stack Tier:
-              </span>
-              <span className="font-semibold">{planet.techStackTier}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className={isDark ? 'text-zinc-500' : 'text-zinc-400'}>
-                Adoption:
-              </span>
-              <span className="font-semibold text-emerald-400">
-                {planet.popularity}
-              </span>
-            </div>
-            {planet.benchmarks && (
-              <div className="flex justify-between border-t border-zinc-800/60 pt-1">
-                <span className={isDark ? 'text-zinc-500' : 'text-zinc-400'}>
-                  Benchmark:
-                </span>
-                <span className="font-semibold text-(--teal)">
-                  {planet.benchmarks}
-                </span>
-              </div>
-            )}
-          </div>
 
           <div>
             <span

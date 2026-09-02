@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { CASE_STUDIES } from '@/lib/case-studies'
 
-type FilterCategory = 'all' | 'web' | 'mobile' | 'erp' | 'custom'
+type FilterCategory = 'all' | 'web' | 'mobile' | 'erp'
 
 export default function CaseStudiesList() {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>('all')
@@ -38,10 +38,9 @@ export default function CaseStudiesList() {
 
   const FILTERS: { id: FilterCategory; label: string }[] = [
     { id: 'all', label: 'All Projects' },
-    { id: 'web', label: 'Web Applications' },
-    { id: 'mobile', label: 'Mobile Apps' },
-    { id: 'erp', label: 'Enterprise & ERP' },
-    { id: 'custom', label: 'Backend, Cloud & AI' },
+    { id: 'web', label: 'Web Platform' },
+    { id: 'mobile', label: 'Mobile App' },
+    { id: 'erp', label: 'Enterprise ERP' },
   ]
 
   return (
@@ -80,7 +79,7 @@ export default function CaseStudiesList() {
                 <div>
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-900">
                     <Image
-                      src={study.image || '/images/outcome_supply_chain.jpg'}
+                      src={study.image || '/images/globnetics.jpg'}
                       alt={study.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"

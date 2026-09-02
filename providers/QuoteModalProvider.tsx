@@ -14,7 +14,7 @@ const QuoteModalContext = createContext<QuoteModalContextValue | undefined>(unde
 
 export function QuoteModalProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [projectType, setProjectType] = useState('erp')
+  const [projectType, setProjectType] = useState('web-development')
 
   const openQuoteModal = useCallback((type?: string) => {
     if (type) {

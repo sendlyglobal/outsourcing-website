@@ -4,15 +4,35 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'motion/react'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Layers,
+  Smartphone,
+  Globe,
+  Cpu,
+} from 'lucide-react'
 import { CASE_STUDIES } from '@/lib/case-studies'
 
 export default function OutcomesSection() {
   const featuredStudies = CASE_STUDIES.slice(0, 3)
 
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'erp':
+        return <Layers className="w-3.5 h-3.5 text-(--teal)" />
+      case 'mobile':
+        return <Smartphone className="w-3.5 h-3.5 text-(--teal)" />
+      case 'web':
+        return <Globe className="w-3.5 h-3.5 text-(--teal)" />
+      default:
+        return <Cpu className="w-3.5 h-3.5 text-(--teal)" />
+    }
+  }
+
   return (
     <section className="w-full py-16 sm:py-24 dark:bg-black px-6 sm:px-10 md:px-14 lg:px-20 border-t border-(--border-color)">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 sm:mb-16 gap-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -23,17 +43,17 @@ export default function OutcomesSection() {
             <span className="font-mono text-xs uppercase tracking-widest text-(--teal) font-semibold block mb-2">
               FEATURED WORK
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-(--text-primary) font-display">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-(--text-primary) font-display">
               Real Projects, Measurable Outcomes
             </h2>
-            <p className="mt-2.5 text-sm sm:text-base text-(--text-secondary) max-w-xl">
-              Explore how we design and build production-grade software solutions across web, mobile, and backend architectures.
+            <p className="mt-3 text-sm sm:text-base text-(--text-secondary) max-w-xl leading-relaxed">
+              Explore how we design and build production-grade software solutions across web, mobile, and enterprise architectures.
             </p>
           </motion.div>
 
           <Link
             href="/case-studies"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-(--teal) hover:text-(--aqua) transition-colors font-mono"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-(--teal) hover:text-(--aqua) transition-colors font-mono shrink-0"
           >
             <span>View All Work</span>
             <ArrowRight size={15} />
@@ -47,13 +67,13 @@ export default function OutcomesSection() {
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.55, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="group h-full rounded-2xl border border-(--border-color) bg-white dark:bg-black hover:border-(--teal) transition-all duration-300 shadow-sm hover:shadow-xl overflow-hidden flex flex-col justify-between">
                 <div>
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-900">
                     <Image
-                      src={study.image || '/images/outcome_supply_chain.jpg'}
+                      src={study.image || '/images/globnetics.jpg'}
                       alt={study.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -66,17 +86,34 @@ export default function OutcomesSection() {
                   </div>
 
                   <div className="p-6 sm:p-7">
-                    <span className="font-mono text-xs uppercase tracking-wider text-(--teal) font-semibold">
-                      {study.categoryLabel}
-                    </span>
+                    <div className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-(--teal) font-semibold mb-2">
+                      {getCategoryIcon(study.category)}
+                      <span>{study.categoryLabel}</span>
+                    </div>
 
-                    <h3 className="text-xl font-bold text-(--text-primary) font-display mt-2 group-hover:text-(--teal) transition-colors leading-snug">
+                    <h3 className="text-xl font-bold text-(--text-primary) font-display group-hover:text-(--teal) transition-colors leading-snug">
                       {study.title}
                     </h3>
 
-                    <p className="mt-3 text-xs sm:text-sm text-(--text-secondary) leading-relaxed">
-                      {study.summary}
-                    </p>
+                    <div className="mt-4 pt-3 border-t border-(--border-color)/50 space-y-2.5">
+                      <div>
+                        <span className="font-mono text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-zinc-500 block">
+                          THE PROBLEM:
+                        </span>
+                        <p className="text-xs text-slate-700 dark:text-zinc-300 leading-relaxed mt-0.5 line-clamp-2">
+                          {study.situation?.paragraphs?.[0] || study.summary}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="font-mono text-[10px] uppercase tracking-wider font-bold text-(--teal) block">
+                          WHAT WE BUILT:
+                        </span>
+                        <p className="text-xs text-slate-700 dark:text-zinc-300 leading-relaxed mt-0.5 line-clamp-2">
+                          {study.solution?.paragraphs?.[0] || study.summary}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

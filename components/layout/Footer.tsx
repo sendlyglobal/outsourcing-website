@@ -6,8 +6,6 @@ import Link from 'next/link'
 const COMPANY_LINKS = [
   { label: 'About Us', href: '/about' },
   { label: 'Services', href: '/services' },
-  { label: 'Technologies', href: '/technologies' },
-  { label: 'Case Studies', href: '/case-studies' },
   { label: 'Careers', href: '/careers' },
   { label: 'Contact', href: '/contact' },
 ]
@@ -15,8 +13,7 @@ const COMPANY_LINKS = [
 const LEGAL_LINKS = [
   { label: 'Privacy Policy', href: '/privacy' },
   { label: 'Terms of Service', href: '/terms' },
-  { label: 'Cookies', href: '/cookies' },
-  { label: 'Careers', href: '/careers' },
+  // { label: 'Cookies', href: '/cookies' },
 ]
 
 export default function Footer() {
