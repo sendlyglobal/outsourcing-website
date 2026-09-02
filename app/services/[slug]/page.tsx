@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
-  ChevronDown,
   Cpu,
   Gauge,
   Lock,
@@ -18,7 +17,7 @@ import {
   Terminal,
   Zap,
 } from "lucide-react";
-import { Button } from "@/components/ui";
+import { Button, Accordion } from "@/components/ui";
 import { SERVICES } from "@/lib/services";
 import { useQuoteModal } from "@/providers/QuoteModalProvider";
 import TransformationForm from "@/components/services/TransformationForm";
@@ -181,7 +180,6 @@ export default function ServiceDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const { openQuoteModal } = useQuoteModal();
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const service = SERVICES.find((s) => s.slug === slug);
 
@@ -208,6 +206,9 @@ export default function ServiceDetailPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
+            <span className="font-mono text-xs uppercase tracking-widest text-(--teal) font-semibold block mb-3">
+              {service.eyebrow}
+            </span>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-(--text-primary) font-display leading-[1.15]">
               {service.title}
@@ -338,53 +339,11 @@ export default function ServiceDetailPage() {
               </p>
             </div>
 
-            <div className="space-y-3.5 max-w-3xl mx-auto">
-              {service.faqs.map((faq, index) => {
-                const isOpen = openFaq === index;
-                return (
-                  <div
-                    key={faq.question}
-                    className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
-                      isOpen
-                        ? "border-(--teal)/50 bg-(--teal)/5 dark:bg-black"
-                        : "border-(--border-color) bg-white dark:bg-black hover:border-(--border-color)/80"
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaq(isOpen ? null : index)}
-                      className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer select-none"
-                      aria-expanded={isOpen}
-                    >
-                      <span className="text-sm sm:text-base font-bold text-(--text-primary) font-display">
-                        {faq.question}
-                      </span>
-                      <ChevronDown
-                        className={`w-4 h-4 text-(--teal) shrink-0 transition-transform duration-200 ${
-                          isOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-(--text-secondary) leading-relaxed border-t border-(--border-color)/40 pt-3">
-                            {faq.answer}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion
+              items={service.faqs}
+              defaultOpenIndex={0}
+              className="max-w-3xl mx-auto"
+            />
           </div>
         </section>
       )}

@@ -2,4 +2,5 @@ export { Button } from './Button'
 export type { ButtonProps, ButtonVariant, ButtonSize, ProjectType } from './Button'
 export { Input, Textarea } from './Input'
 export type { InputProps, TextareaProps, FormFieldProps } from './Input'
-
+export { Accordion } from './Accordion'
+export type { AccordionProps, AccordionItem } from './Accordion'
