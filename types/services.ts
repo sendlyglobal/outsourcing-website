@@ -12,4 +12,12 @@ export interface ServiceItem {
     title: string
     description: string
   }[]
+  category?: string
+  navDescription?: string
+  whoItsFor?: string
+  faqs?: {
+    question: string
+    answer: string
+  }[]
+  methodologyKey?: string
 }
